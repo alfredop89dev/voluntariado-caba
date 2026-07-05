@@ -1,0 +1,10 @@
+Vamos a organizar qué tipo de diré necesitamos asi busco un programador, le podríamos decir algo así:
+
+Hacer un equipo landing Page / Home de la Red de Voluntarios
+En esta primera etapa necesitamos desarrollar un sitio web de una sola página (Home/Landing Page), priorizando la rapidez de implementación, la simplicidad de administración y la posibilidad de escalar el proyecto en el futuro.
+El Home debe presentar de manera clara la información de la Red de Voluntarios e incluir tres secciones principales:
+	1.	Calendario de eventos: esta será la sección principal. Debe permitir visualizar los eventos organizados por fecha (día), mostrando para cada uno el flyer o imagen del evento, el nombre o título, la fecha correspondiente y un botón o enlace que dirija a la página o formulario del evento. Si en un mismo día existen varios eventos, todos deben mostrarse agrupados bajo esa fecha. Es importante que este calendario sea fácil de actualizar, permitiendo agregar, editar o eliminar eventos sin necesidad de modificar el diseño del sitio.
+	2.	Formulario de voluntariado: incluir un botón o llamada a la acción que redirija al formulario de inscripción, el cual ya se encuentra desarrollado. En esta etapa no es necesario crear un formulario nuevo, sino únicamente enlazar el existente.
+	3.	Donaciones: incluir un botón o llamada a la acción que redirija al formulario o plataforma de donaciones ya disponible, sin desarrollar un sistema de donaciones propio en esta primera versión.
+El diseño debe ser limpio, moderno, responsive (adaptado a dispositivos móviles, tablets y computadoras) y pensado para ofrecer una buena experiencia de usuario. También es importante que la estructura sea lo suficientemente versátil y escalable para que, en una segunda etapa, se puedan incorporar nuevas secciones, contenidos o funcionalidades sin necesidad de reconstruir el sitio desde cero.
+El objetivo de esta primera versión es contar con un Home funcional, fácil de mantener y preparado para crecer junto con las necesidades de la Red de Voluntarios.

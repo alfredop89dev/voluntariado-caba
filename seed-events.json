@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Jornada de Acopio de Alimentos",
+    "organizer": "Red de Voluntarios CABA",
+    "image": "https://ejemplo.com/imagen-evento.jpg",
+    "date": { "$date": "2026-07-15T10:00:00.000Z" },
+    "time": "10:00",
+    "description": "Recolección de alimentos no perecederos para las comunidades afectadas. Estamos organizando puntos de acopio en toda la ciudad.",
+    "location": "Plaza Central, CABA",
+    "flyer": "https://ejemplo.com/flyer.jpg",
+    "logo": "https://ejemplo.com/logo.png",
+    "instagram": "@redvoluntarios",
+    "googleMaps": "https://maps.google.com/?q=plaza+central+caba",
+    "phone": "11-1234-5678"
+  },
+  {
+    "title": "Taller de Primeros Auxilios",
+    "organizer": "Brigada de Respuesta Rápida",
+    "date": { "$date": "2026-07-15T14:00:00.000Z" },
+    "time": "14:00",
+    "description": "Capacitación básica en primeros auxilios para voluntarios de campo.",
+    "location": "Centro Comunitario San Martín, CABA",
+    "instagram": "@brigada_respuesta",
+    "googleMaps": "https://maps.google.com/?q=centro+comunitario+san+martin",
+    "phone": "11-2345-6789"
+  },
+  {
+    "title": "Reconstrucción de Viviendas",
+    "organizer": "Red de Voluntarios CABA",
+    "date": { "$date": "2026-07-22T09:00:00.000Z" },
+    "time": "09:00",
+    "description": "Brigada de voluntarios para reconstrucción de viviendas en zonas afectadas.",
+    "location": "Barrio 31, CABA",
+    "flyer": "https://ejemplo.com/flyer-reconstruccion.jpg",
+    "instagram": "@redvoluntarios",
+    "phone": "11-3456-7890"
+  },
+  {
+    "title": "Campaña de Salud Comunitaria",
+    "organizer": "Médicos Solidarios",
+    "date": { "$date": "2026-07-29T08:00:00.000Z" },
+    "time": "08:00",
+    "description": "Jornada médica gratuita con atención primaria, entrega de medicamentos y vacunación.",
+    "location": "Hospital Municipal, CABA",
+    "logo": "https://ejemplo.com/logo-medicos.png",
+    "instagram": "@medicos_solidarios",
+    "googleMaps": "https://maps.google.com/?q=hospital+municipal+caba",
+    "phone": "11-4567-8901"
+  }
+]
