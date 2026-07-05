@@ -1,15 +1,14 @@
 import crypto from "crypto";
 
-const SECRET = process.env.ADMIN_TOKEN_SECRET;
-
 function getSecret(): string {
-  if (!SECRET) {
-    if (process.env.NODE_ENV === "production") {
-      throw new Error("ADMIN_TOKEN_SECRET no está configurado");
-    }
-    return "dev-secret-do-not-use-in-production";
+  const secret = process.env.ADMIN_TOKEN_SECRET;
+  if (!secret) {
+    throw new Error(
+      "ADMIN_TOKEN_SECRET no está configurado. " +
+        "Debe definirse en .env.local con un valor aleatorio seguro.",
+    );
   }
-  return SECRET;
+  return secret;
 }
 
 export function createToken(username: string): string {

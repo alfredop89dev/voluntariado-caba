@@ -1,12 +1,19 @@
 "use client";
 
+"use client";
+
 import { motion } from "motion/react";
 import { FadeIn } from "@/components/ui/fade-in";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n/translations-context";
 
-const DONATIONS_URL = process.env.NEXT_PUBLIC_DONATIONS_URL ?? "#";
+const DONATIONS_URL = process.env.NEXT_PUBLIC_DONATIONS_URL;
 
 export function DonationsSection() {
+  const { t } = useI18n();
+
+  if (!DONATIONS_URL) return null;
+
   return (
     <section id="donaciones" className="relative overflow-hidden bg-white px-6 py-24 sm:py-32">
       <div className="absolute -top-24 left-1/2 size-96 -translate-x-1/2 rounded-full bg-coral/3 blur-3xl" />
@@ -14,14 +21,13 @@ export function DonationsSection() {
       <div className="relative mx-auto max-w-xl text-center">
         <FadeIn>
           <p className="mb-3 text-xs font-medium text-coral uppercase tracking-[0.2em]">
-            Donaciones
+            {t("nav.donaciones")}
           </p>
           <h2 className="mb-4 text-3xl font-light text-navy sm:text-4xl">
-            Tu aporte <span className="font-semibold">importa</span>
+            {t("donations.title")}
           </h2>
           <p className="mb-10 text-sm font-light leading-relaxed text-taupe">
-            Tu contribución es fundamental para ayudar a las víctimas del terremoto.
-            Cada donación, por pequeña que sea, marca una gran diferencia.
+            {t("donations.description")}
           </p>
         </FadeIn>
 
@@ -35,7 +41,7 @@ export function DonationsSection() {
             className="inline-block"
           >
             <Button variant="secondary" size="lg">
-              Quiero donar
+              {t("donations.cta")}
             </Button>
           </motion.a>
         </FadeIn>

@@ -1,0 +1,101 @@
+{
+  "site": {
+    "title": "Volunteer Network",
+    "tagline": "Together for the reconstruction of Venezuela",
+    "description": "Volunteer Network for the reconstruction of Venezuela. Join, donate, and participate in our events."
+  },
+  "nav": {
+    "calendario": "Calendar",
+    "voluntariado": "Volunteer",
+    "donaciones": "Donations"
+  },
+  "hero": {
+    "badge": "Volunteer network in CABA for Venezuela",
+    "title": "Volunteer network in CABA for Venezuela",
+    "description": "We are a community of Venezuelans and Argentines organizing events, collecting donations, and providing support to earthquake victims in Venezuela.",
+    "cta_calendario": "View events",
+    "cta_voluntariado": "Join as volunteer"
+  },
+  "about": {
+    "badge": "About us",
+    "title": "Volunteer Network in CABA",
+    "description": "A group of people committed to humanitarian aid, organizing events and campaigns to support communities affected by the earthquake in Venezuela from Buenos Aires City.",
+    "card_1_title": "Solidarity",
+    "card_1_description": "We work together to provide support to those who need it most, coordinating efforts and resources.",
+    "card_2_title": "Organization",
+    "card_2_description": "We plan events and campaigns efficiently to maximize the impact of our actions.",
+    "card_3_title": "Community",
+    "card_3_description": "We build a support network of volunteers, donors, and organizations committed to the cause."
+  },
+  "calendar": {
+    "badge": "Calendar",
+    "title": "Upcoming",
+    "title_accent": "events",
+    "search_placeholder": "Search by title, organizer, location...",
+    "search_found": "event found",
+    "search_found_plural": "events found",
+    "view_event": "View event",
+    "no_results_search": "No events matched your search.",
+    "no_results": "No upcoming events. Check back soon.",
+    "clear_search": "Clear search"
+  },
+  "volunteer": {
+    "badge": "Volunteer",
+    "title": "Join as a",
+    "title_accent": "volunteer",
+    "description": "Fill out the form and we will contact you to assign you to activities that best match your skills and availability.",
+    "external_cta": "Go to registration form",
+    "form": {
+      "name": "Full name",
+      "email": "Email",
+      "event": "Which event would you like to join?",
+      "organizer": "Organization / group",
+      "instagram": "Instagram",
+      "phone": "Phone",
+      "location": "Location / neighborhood",
+      "skills": "Skills / area of help",
+      "availability": "Availability",
+      "submit": "Submit request",
+      "submitting": "Sending...",
+      "success_title": "Thank you for registering!",
+      "success_message": "We will contact you soon.",
+        "errors": {
+          "name_required": "Name is required",
+          "email_required": "Email is required",
+          "email_invalid": "Invalid email"
+        },
+        "submit_error": "An error occurred while registering. Please try again."
+    }
+  },
+  "donations": {
+    "title": "Your contribution matters",
+    "description": "With your donation you help affected communities rebuild their lives. Every bit counts.",
+    "cta": "I want to donate"
+  },
+  "footer": {
+    "tagline": "Together for the reconstruction of Venezuela",
+    "description": "We are a community of Venezuelans and Argentines in CABA organizing events, collecting donations, and supporting earthquake victims in Venezuela.",
+    "links_title": "Links",
+    "contact_title": "Contact",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "follow_us": "Follow us",
+    "rights": "All rights reserved."
+  },
+  "event_detail": {
+    "back": "Back to calendar",
+    "other_events": "Other",
+    "other_events_accent": "events"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "logout": "Log out",
+    "nav": {
+      "dashboard": "Dashboard",
+      "events": "Events",
+      "volunteers": "Volunteers",
+      "users": "Users",
+      "view_landing": "View landing"
+    }
+  }
+}

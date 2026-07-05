@@ -1,46 +1,37 @@
 "use client";
 
 import { FadeIn } from "@/components/ui/fade-in";
+import { useI18n } from "@/lib/i18n/translations-context";
 
-const values = [
-  {
-    title: "Solidaridad",
-    description: "Trabajamos juntos para brindar apoyo a quienes más lo necesitan.",
-  },
-  {
-    title: "Organización",
-    description: "Coordinamos eventos y recursos de forma eficiente para maximizar el impacto.",
-  },
-  {
-    title: "Comunidad",
-    description: "Construimos una red de voluntarios comprometidos con la reconstrucción.",
-  },
-];
+const cardKeys = [
+  { title: "about.card_1_title", desc: "about.card_1_description" },
+  { title: "about.card_2_title", desc: "about.card_2_description" },
+  { title: "about.card_3_title", desc: "about.card_3_description" },
+] as const;
 
 export function AboutSection() {
+  const { t } = useI18n();
+
   return (
     <section className="bg-white px-6 py-24 sm:py-32">
       <div className="mx-auto max-w-5xl">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <FadeIn>
             <p className="mb-3 text-xs font-medium text-coral uppercase tracking-[0.2em]">
-              Quiénes somos
+              {t("about.badge")}
             </p>
             <h2 className="mb-4 text-3xl font-light text-navy sm:text-4xl">
-              Red de Voluntarios <span className="font-semibold">en CABA</span>
+              {t("about.title")}
             </h2>
             <p className="text-sm font-light leading-relaxed text-taupe">
-              Somos una comunidad de argentinos solidarios radicados en Buenos Aires
-              que organiza eventos de recaudación, acopio y difusión para ayudar a las
-              víctimas del terremoto en Venezuela. Creemos en el poder de la acción
-              colectiva para generar cambio.
+              {t("about.description")}
             </p>
           </FadeIn>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-3">
-          {values.map((value, i) => (
-            <FadeIn key={value.title} delay={i * 0.1}>
+          {cardKeys.map((keys, i) => (
+            <FadeIn key={keys.title} delay={i * 0.1}>
               <div className="group rounded-2xl border border-muted/30 bg-white p-6 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-8">
                 <div className="mb-4 flex size-10 items-center justify-center rounded-xl bg-coral/10 text-coral transition-colors duration-300 group-hover:bg-coral group-hover:text-white">
                   <svg className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -55,8 +46,8 @@ export function AboutSection() {
                     )}
                   </svg>
                 </div>
-                <h3 className="mb-2 text-base font-semibold text-navy">{value.title}</h3>
-                <p className="text-xs leading-relaxed text-taupe">{value.description}</p>
+                <h3 className="mb-2 text-base font-semibold text-navy">{t(keys.title)}</h3>
+                <p className="text-xs leading-relaxed text-taupe">{t(keys.desc)}</p>
               </div>
             </FadeIn>
           ))}

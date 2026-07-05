@@ -8,6 +8,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "ghost";
   size?: "sm" | "md" | "lg";
   children?: ReactNode;
+  href?: string;
+  target?: string;
+  rel?: string;
 }
 
 export function Button({
@@ -15,6 +18,9 @@ export function Button({
   variant = "primary",
   size = "md",
   children,
+  href,
+  target,
+  rel,
   ...props
 }: ButtonProps) {
   const classes = cn(
@@ -29,16 +35,18 @@ export function Button({
     className,
   );
 
-  return (
+  const shared = (
     <motion.span
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 500, damping: 20, mass: 0.8 }}
       className="inline-flex"
     >
-      <button className={classes} {...props}>
-        {children}
-      </button>
+      {href
+        ? <a href={href} target={target} rel={rel} className={classes}>{children}</a>
+        : <button className={classes} {...props}>{children}</button>}
     </motion.span>
   );
+
+  return shared;
 }

@@ -2,6 +2,7 @@
 
 :root {
   --navy: #102542;
+  --navy-dark: #06101f;
   --coral: #f87060;
   --muted: #cdd7d6;
   --taupe: #b3a394;
@@ -10,6 +11,7 @@
 
 @theme inline {
   --color-navy: var(--navy);
+  --color-navy-dark: var(--navy-dark);
   --color-coral: var(--coral);
   --color-muted: var(--muted);
   --color-taupe: var(--taupe);

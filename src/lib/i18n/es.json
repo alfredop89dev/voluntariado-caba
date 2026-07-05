@@ -1,0 +1,101 @@
+{
+  "site": {
+    "title": "Red de Voluntarios",
+    "tagline": "Juntos por la reconstrucción de Venezuela",
+    "description": "Red de Voluntarios por la reconstrucción de Venezuela. Únete, dona y participa en nuestros eventos."
+  },
+  "nav": {
+    "calendario": "Calendario",
+    "voluntariado": "Voluntariado",
+    "donaciones": "Donaciones"
+  },
+  "hero": {
+    "badge": "Red de voluntarios en CABA por Venezuela",
+    "title": "Red de voluntarios en CABA por Venezuela",
+    "description": "Somos una comunidad de venezolanos y argentinos solidarios organizando eventos, recolectando donaciones y brindando apoyo a las víctimas del terremoto en Venezuela.",
+    "cta_calendario": "Ver eventos",
+    "cta_voluntariado": "Sumarme como voluntario"
+  },
+  "about": {
+    "badge": "Quiénes somos",
+    "title": "Red de Voluntarios en CABA",
+    "description": "Un grupo de personas comprometidas con la ayuda humanitaria, organizando eventos y campañas para apoyar a las comunidades afectadas por el terremoto en Venezuela desde la Ciudad de Buenos Aires.",
+    "card_1_title": "Solidaridad",
+    "card_1_description": "Trabajamos juntos para brindar apoyo a quienes más lo necesitan, coordinando esfuerzos y recursos.",
+    "card_2_title": "Organización",
+    "card_2_description": "Planificamos eventos y campañas de manera eficiente para maximizar el impacto de nuestras acciones.",
+    "card_3_title": "Comunidad",
+    "card_3_description": "Construimos una red de apoyo entre voluntarios, donantes y organizaciones comprometidas con la causa."
+  },
+  "calendar": {
+    "badge": "Calendario",
+    "title": "Próximos",
+    "title_accent": "eventos",
+    "search_placeholder": "Buscar por título, organizador, lugar...",
+    "search_found": "evento encontrado",
+    "search_found_plural": "eventos encontrados",
+    "view_event": "Ver evento",
+    "no_results_search": "No se encontraron eventos con ese criterio.",
+    "no_results": "No hay eventos próximos. Vuelve pronto.",
+    "clear_search": "Limpiar búsqueda"
+  },
+  "volunteer": {
+    "badge": "Voluntariado",
+    "title": "Sumate como",
+    "title_accent": "voluntario",
+    "description": "Completá el formulario y nos pondremos en contacto para asignarte a las actividades que mejor se adapten a tus habilidades y disponibilidad.",
+    "external_cta": "Ir al formulario de inscripción",
+    "form": {
+      "name": "Nombre completo",
+      "email": "Correo electrónico",
+      "event": "¿A qué evento querés sumarte?",
+      "organizer": "Organización / grupo",
+      "instagram": "Instagram",
+      "phone": "Teléfono",
+      "location": "Ubicación / barrio",
+      "skills": "Habilidades / área de ayuda",
+      "availability": "Disponibilidad",
+      "submit": "Enviar solicitud",
+      "submitting": "Enviando...",
+      "success_title": "¡Gracias por registrarte!",
+      "success_message": "Nos pondremos en contacto pronto.",
+        "errors": {
+          "name_required": "El nombre es obligatorio",
+          "email_required": "El email es obligatorio",
+          "email_invalid": "Email inválido"
+        },
+        "submit_error": "Ocurrió un error al registrarte. Intenta de nuevo."
+    }
+  },
+  "donations": {
+    "title": "Tu aporte importa",
+    "description": "Con tu donación ayudás a las comunidades afectadas a reconstruir sus vidas. Cada granito de arena cuenta.",
+    "cta": "Quiero donar"
+  },
+  "footer": {
+    "tagline": "Juntos por la reconstrucción de Venezuela",
+    "description": "Somos una comunidad de venezolanos y argentinos en CABA organizando eventos, recolectando donaciones y brindando apoyo a las víctimas del terremoto en Venezuela.",
+    "links_title": "Enlaces",
+    "contact_title": "Contacto",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "follow_us": "Seguinos",
+    "rights": "Todos los derechos reservados."
+  },
+  "event_detail": {
+    "back": "Volver al calendario",
+    "other_events": "Otros",
+    "other_events_accent": "eventos"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "logout": "Cerrar sesión",
+    "nav": {
+      "dashboard": "Dashboard",
+      "events": "Eventos",
+      "volunteers": "Voluntarios",
+      "users": "Usuarios",
+      "view_landing": "Ver landing"
+    }
+  }
+}

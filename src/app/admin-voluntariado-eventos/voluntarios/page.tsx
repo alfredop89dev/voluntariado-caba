@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import useSWR from "swr";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { useToastStore } from "@/components/ui/toast";
 
 interface VolunteerEntry {
   id: string;
@@ -50,6 +51,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function AdminVolunteersPage() {
+  const addToast = useToastStore((s) => s.addToast);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
@@ -67,19 +69,29 @@ export default function AdminVolunteersPage() {
   );
 
   const updateStatus = async (id: string, status: string) => {
-    await fetch(`/api/admin/volunteers/${id}`, {
+    const res = await fetch(`/api/admin/volunteers/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
+    if (res.ok) {
+      addToast(`Estado actualizado a "${STATUS_LABELS[status]}"`, "success");
+    } else {
+      addToast("Error al actualizar estado", "error");
+    }
     mutate();
   };
 
   const onDelete = async () => {
     if (!deleteTarget) return;
-    await fetch(`/api/admin/volunteers/${deleteTarget}`, { method: "DELETE" });
+    const res = await fetch(`/api/admin/volunteers/${deleteTarget}`, { method: "DELETE" });
     setDeleteTarget(null);
-    mutate();
+    if (res.ok) {
+      addToast("Solicitud eliminada correctamente", "success");
+    } else {
+      addToast("Error al eliminar solicitud", "error");
+    }
+    await mutate();
   };
 
   const exportCSV = () => {

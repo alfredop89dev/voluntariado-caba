@@ -3,9 +3,7 @@ import { cookies } from "next/headers";
 import { connectDB } from "@/lib/mongodb";
 import { User, verifyPassword, hashPassword } from "@/lib/models/user";
 import { createToken } from "@/lib/auth";
-
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME ?? "admin";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "admin123";
+import { ADMIN } from "@/lib/config";
 
 export async function DELETE() {
   const cookieStore = await cookies();
@@ -33,20 +31,28 @@ export async function POST(request: Request) {
 
     const db = await connectDB();
 
-    if (db) {
-      const user = await User.findOne({ username });
+    if (!db) {
+      return NextResponse.json(
+        { error: "Error de conexión con la base de datos" },
+        { status: 503 },
+      );
+    }
 
-      if (user) {
-        if (!verifyPassword(password, user.password)) {
-          return NextResponse.json(
-            { error: "Credenciales inválidas" },
-            { status: 401 },
-          );
-        }
-      } else if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    const user = await User.findOne({ username });
+
+    if (user) {
+      if (!verifyPassword(password, user.password)) {
+        return NextResponse.json(
+          { error: "Credenciales inválidas" },
+          { status: 401 },
+        );
+      }
+    } else {
+      const userCount = await User.countDocuments();
+      if (userCount === 0) {
         await User.create({
-          username: ADMIN_USERNAME,
-          password: hashPassword(ADMIN_PASSWORD),
+          username,
+          password: hashPassword(password),
           role: "admin",
         });
       } else {
@@ -55,24 +61,6 @@ export async function POST(request: Request) {
           { status: 401 },
         );
       }
-
-      const token = createToken(username);
-      const cookieStore = await cookies();
-      cookieStore.set("admin_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24,
-      });
-      return NextResponse.json({ success: true, username });
-    }
-
-    if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
-      return NextResponse.json(
-        { error: "Credenciales inválidas" },
-        { status: 401 },
-      );
     }
 
     const token = createToken(username);
@@ -82,7 +70,7 @@ export async function POST(request: Request) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24,
+      maxAge: ADMIN.SESSION_MAX_AGE,
     });
 
     return NextResponse.json({ success: true, username });

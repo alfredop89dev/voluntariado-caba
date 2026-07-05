@@ -16,3 +16,25 @@ export async function getEvent(id: string): Promise<IEventData | null> {
     return null;
   }
 }
+
+export async function getRelatedEvents(
+  currentId: string,
+  limit = 3,
+): Promise<IEventData[]> {
+  const db = await connectDB();
+  if (!db) return [];
+
+  try {
+    const events = await Event.find({ _id: { $ne: currentId } })
+      .sort({ date: 1 })
+      .limit(limit)
+      .lean();
+
+    return events.map((e: Record<string, unknown>) => {
+      const { _id, ...rest } = e;
+      return { id: String(_id), ...rest } as unknown as IEventData;
+    });
+  } catch {
+    return [];
+  }
+}

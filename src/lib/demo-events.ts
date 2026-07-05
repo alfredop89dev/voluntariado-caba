@@ -1,0 +1,52 @@
+import type { IEventData } from "@/lib/models/event";
+
+export const DEMO_EVENTS: IEventData[] = [
+  {
+    id: "demo-1",
+    title: "Jornada de Acopio de Alimentos",
+    organizer: "Red de Voluntarios CABA",
+    date: new Date("2026-07-15T10:00:00.000Z"),
+    time: "10:00",
+    description:
+      "Recolección de alimentos no perecederos para las comunidades afectadas. Estamos organizando puntos de acopio en toda la ciudad.",
+    location: "Plaza Central, CABA",
+    instagram: "@redvoluntarios",
+    googleMaps: "https://maps.google.com/?q=plaza+central+caba",
+    phone: "11-1234-5678",
+  },
+  {
+    id: "demo-2",
+    title: "Taller de Primeros Auxilios",
+    organizer: "Brigada de Respuesta Rápida",
+    date: new Date("2026-07-15T14:00:00.000Z"),
+    time: "14:00",
+    description: "Capacitación básica en primeros auxilios para voluntarios de campo.",
+    location: "Centro Comunitario San Martín, CABA",
+    instagram: "@brigada_respuesta",
+    googleMaps: "https://maps.google.com/?q=centro+comunitario+san+martin",
+    phone: "11-2345-6789",
+  },
+  {
+    id: "demo-3",
+    title: "Reconstrucción de Viviendas",
+    organizer: "Red de Voluntarios CABA",
+    date: new Date("2026-07-22T09:00:00.000Z"),
+    time: "09:00",
+    description: "Brigada de voluntarios para reconstrucción de viviendas en zonas afectadas.",
+    location: "Barrio 31, CABA",
+    instagram: "@redvoluntarios",
+    phone: "11-3456-7890",
+  },
+  {
+    id: "demo-4",
+    title: "Campaña de Salud Comunitaria",
+    organizer: "Médicos Solidarios",
+    date: new Date("2026-07-29T08:00:00.000Z"),
+    time: "08:00",
+    description: "Jornada médica gratuita con atención primaria, entrega de medicamentos y vacunación.",
+    location: "Hospital Municipal, CABA",
+    instagram: "@medicos_solidarios",
+    googleMaps: "https://maps.google.com/?q=hospital+municipal+caba",
+    phone: "11-4567-8901",
+  },
+];

@@ -7,6 +7,7 @@ import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { useVolunteerSubmit } from "@/hooks/use-volunteer";
 import { volunteerSchema } from "@/lib/schemas";
+import { useI18n } from "@/lib/i18n/translations-context";
 import type { z } from "zod";
 
 type VolunteerFormData = z.infer<typeof volunteerSchema>;
@@ -18,6 +19,7 @@ const labelClass =
   "mb-1.5 block text-[11px] font-semibold text-white/80 uppercase tracking-[0.15em]";
 
 export function VolunteerForm() {
+  const { t } = useI18n();
   const [submitted, setSubmitted] = useState(false);
   const { submit, isSubmitting, error: submitError } = useVolunteerSubmit();
 
@@ -51,8 +53,8 @@ export function VolunteerForm() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <p className="mb-2 text-lg font-semibold text-white">¡Gracias por registrarte!</p>
-        <p className="text-sm text-white/60">Te contactaremos pronto con más información.</p>
+        <p className="mb-2 text-lg font-semibold text-white">{t("volunteer.form.success_title")}</p>
+        <p className="text-sm text-white/60">{t("volunteer.form.success_message")}</p>
       </motion.div>
     );
   }
@@ -65,125 +67,81 @@ export function VolunteerForm() {
           animate={{ opacity: 1, y: 0 }}
           className="rounded-xl border border-coral/30 bg-coral/10 px-4 py-3 text-xs text-coral"
         >
-          Ocurrió un error al registrarte. Intenta de nuevo.
+          {t("volunteer.form.submit_error")}
         </motion.div>
       )}
 
       <div>
         <label htmlFor="name" className={labelClass}>
-          Nombre completo
+          {t("volunteer.form.name")}
         </label>
-        <input
-          id="name"
-          {...register("name")}
-          className={inputClass}
-        />
+        <input id="name" {...register("name")} className={inputClass} />
         {errors.name && (
-          <p className="mt-1.5 text-xs text-coral/90">{errors.name.message}</p>
+          <p className="mt-1.5 text-xs text-coral/90">{t("volunteer.form.errors.name_required")}</p>
         )}
       </div>
 
       <div>
         <label htmlFor="email" className={labelClass}>
-          Correo electrónico
+          {t("volunteer.form.email")}
         </label>
-        <input
-          id="email"
-          type="email"
-          {...register("email")}
-          className={inputClass}
-        />
+        <input id="email" type="email" {...register("email")} className={inputClass} />
         {errors.email && (
-          <p className="mt-1.5 text-xs text-coral/90">{errors.email.message}</p>
+          <p className="mt-1.5 text-xs text-coral/90">{t("volunteer.form.errors.email_required")}</p>
         )}
       </div>
 
       <div>
         <label htmlFor="interestedEvent" className={labelClass}>
-          ¿A qué evento querés sumarte? (opcional)
+          {t("volunteer.form.event")}
         </label>
-        <input
-          id="interestedEvent"
-          {...register("interestedEvent")}
-          placeholder="Ej: Jornada de Acopio, Taller de salud..."
-          className={inputClass}
-        />
+        <input id="interestedEvent" {...register("interestedEvent")} className={inputClass} />
       </div>
 
       <div>
         <label htmlFor="organizer" className={labelClass}>
-          Organización / grupo (opcional)
+          {t("volunteer.form.organizer")}
         </label>
-        <input
-          id="organizer"
-          {...register("organizer")}
-          placeholder="Ej: Red de Voluntarios, Brigada Juvenil..."
-          className={inputClass}
-        />
+        <input id="organizer" {...register("organizer")} className={inputClass} />
       </div>
 
       <div>
         <label htmlFor="instagram" className={labelClass}>
-          Instagram (opcional)
+          {t("volunteer.form.instagram")}
         </label>
-        <input
-          id="instagram"
-          {...register("instagram")}
-          placeholder="@tuusuario"
-          className={inputClass}
-        />
+        <input id="instagram" {...register("instagram")} className={inputClass} />
       </div>
 
       <div>
         <label htmlFor="phone" className={labelClass}>
-          Teléfono (opcional)
+          {t("volunteer.form.phone")}
         </label>
-        <input
-          id="phone"
-          {...register("phone")}
-          placeholder="Ej: 11-1234-5678"
-          className={inputClass}
-        />
+        <input id="phone" {...register("phone")} className={inputClass} />
       </div>
 
       <div>
         <label htmlFor="location" className={labelClass}>
-          Ubicación / barrio (opcional)
+          {t("volunteer.form.location")}
         </label>
-        <input
-          id="location"
-          {...register("location")}
-          placeholder="Ej: Palermo, CABA"
-          className={inputClass}
-        />
+        <input id="location" {...register("location")} className={inputClass} />
       </div>
 
       <div>
         <label htmlFor="skills" className={labelClass}>
-          Habilidades / área de ayuda (opcional)
+          {t("volunteer.form.skills")}
         </label>
-        <input
-          id="skills"
-          {...register("skills")}
-          placeholder="Ej: salud, logística, construcción, traducción..."
-          className={inputClass}
-        />
+        <input id="skills" {...register("skills")} className={inputClass} />
       </div>
 
       <div>
         <label htmlFor="availability" className={labelClass}>
-          Disponibilidad (opcional)
+          {t("volunteer.form.availability")}
         </label>
-        <input
-          id="availability"
-          {...register("availability")}
-          placeholder="Ej: fines de semana, tiempo completo..."
-          className={inputClass}
-        />
+        <input id="availability" {...register("availability")} className={inputClass} />
       </div>
 
       <Button type="submit" disabled={isSubmitting} className="w-full" size="lg">
-        {isSubmitting ? "Enviando..." : "Enviar inscripción"}
+        {isSubmitting ? t("volunteer.form.submitting") : t("volunteer.form.submit")}
       </Button>
     </form>
   );

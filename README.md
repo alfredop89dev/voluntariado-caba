@@ -41,10 +41,10 @@ src/
 │   │   ├── footer.tsx
 │   │   └── header.tsx           # Nav + menú mobile (Zustand)
 │   ├── sections/
+│   │   ├── about-section.tsx    # Quiénes somos
 │   │   ├── calendar-section.tsx # Calendario agrupado por fecha + paginación
 │   │   ├── donations-section.tsx
 │   │   ├── hero.tsx             # Hero con gradiente + 8 estrellas SVG
-│   │   ├── hero-stars.tsx
 │   │   ├── volunteer-form.tsx   # Formulario react-hook-form
 │   │   └── volunteer-section.tsx
 │   └── ui/
@@ -57,10 +57,13 @@ src/
 │   └── use-volunteer.ts         # SWR mutation voluntarios
 ├── lib/
 │   ├── models/
-│   │   ├── event.ts             # Schema: title, date, flyerImage, eventUrl
-│   │   └── volunteer.ts         # Schema: name, email, phone, skills
+│   │   ├── event.ts             # Schema: title, date, time, location, flyer, etc.
+│   │   ├── user.ts              # Schema: username, password (scrypt), role
+│   │   └── volunteer.ts         # Schema: name, email, phone, skills, status
 │   ├── demo-events.ts           # 4 eventos demo offline
-│   ├── get-event.ts             # Server: get event by ID (DB o demo)
+│   ├── auth.ts                   # HMAC-SHA256 tokens
+│   ├── config.ts                 # Constantes compartidas
+│   ├── get-event.ts              # Server: get event by ID (DB)
 │   ├── mongodb.ts               # Conexión singleton
 │   ├── rate-limiter.ts          # In-memory rate limit (10 req/min)
 │   ├── schemas.ts               # Validación Zod
@@ -103,8 +106,6 @@ cp .env.example .env.local
 | `MONGODB_URI` | URI de conexión a MongoDB |
 | `NEXT_PUBLIC_DONATIONS_URL` | URL de la plataforma de donaciones |
 | `NEXT_PUBLIC_VOLUNTEER_FORM_URL` | Si se setea, reemplaza el formulario inline por redirección externa |
-| `ADMIN_USERNAME` | Usuario admin del panel |
-| `ADMIN_PASSWORD` | Contraseña del admin |
 | `ADMIN_TOKEN_SECRET` | Secreto para firmar cookies de sesión |
 
 ## Scripts

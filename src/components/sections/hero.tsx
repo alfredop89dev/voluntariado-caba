@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useI18n } from "@/lib/i18n/translations-context";
 
 const starPath = "M0,-5 L1.5,-1.5 L5,-1.5 L2.5,1 L3.5,5 L0,2.5 L-3.5,5 L-2.5,1 L-5,-1.5 L-1.5,-1.5 Z";
 
@@ -23,8 +24,10 @@ const starItem = {
 };
 
 export function Hero() {
+  const { t } = useI18n();
+
   return (
-    <section className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-gradient-to-b from-[#06101f] via-navy to-navy px-6 sm:min-h-[80dvh] lg:min-h-[70dvh]">
+    <section className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-navy px-6 sm:min-h-[80dvh] lg:min-h-[70dvh]">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(248,112,96,0.06)_0%,transparent_60%)]" />
 
       <motion.div
@@ -37,22 +40,19 @@ export function Hero() {
           variants={item}
           className="mb-5 text-xs font-medium text-coral uppercase tracking-[0.25em]"
         >
-          Red de Voluntarios
+          {t("hero.badge")}
         </motion.p>
         <motion.h1
           variants={item}
           className="mb-6 text-4xl font-light leading-tight text-white sm:text-5xl lg:text-6xl"
         >
-          Red de voluntarios
-          <br />
-          <span className="font-semibold">en CABA por Venezuela</span>
+          {t("hero.title")}
         </motion.h1>
         <motion.p
           variants={item}
           className="mx-auto max-w-md text-base font-light leading-relaxed text-muted/70"
         >
-          Únete a la comunidad de voluntarios por la reconstrucción de Venezuela.
-          Juntos podemos marcar la diferencia.
+          {t("hero.description")}
         </motion.p>
 
         <motion.div

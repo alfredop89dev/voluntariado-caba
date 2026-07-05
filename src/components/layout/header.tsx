@@ -3,35 +3,45 @@
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { useUiStore } from "@/stores/ui-store";
+import { NAV_LINKS } from "@/lib/config";
+import { useI18n } from "@/lib/i18n/translations-context";
 
 export function Header() {
   const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useUiStore();
-
-  const links = [
-    { href: "#calendario", label: "Calendario" },
-    { href: "#voluntariado", label: "Voluntariado" },
-    { href: "#donaciones", label: "Donaciones" },
-  ];
+  const { t } = useI18n();
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-muted/20 bg-white/80 backdrop-blur-md">
+    <header className="fixed top-0 z-50 w-full border-b border-muted/20 bg-black/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
         <Link
           href="/"
-          className="cursor-pointer text-sm font-semibold tracking-wide text-navy uppercase"
+          className="cursor-pointer text-white transition-colors duration-200 hover:text-white/70"
           onClick={closeMobileMenu}
+          aria-label={t("nav.calendario")}
         >
-          Red de Voluntarios
+          <svg
+            className="size-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <ellipse cx="12" cy="12" rx="4" ry="10" />
+            <path d="M2 12h20" />
+          </svg>
         </Link>
 
         <nav className="hidden items-center gap-8 text-xs font-medium text-taupe uppercase tracking-[0.15em] sm:flex">
-          {links.map((link) => (
+          {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className="cursor-pointer transition-colors duration-200 hover:text-navy"
             >
-              {link.label}
+              {t(`nav.${link.label.toLowerCase()}`)}
             </Link>
           ))}
         </nav>
@@ -39,7 +49,7 @@ export function Header() {
         <button
           onClick={toggleMobileMenu}
           className="flex size-8 cursor-pointer items-center justify-center sm:hidden"
-          aria-label="Menú"
+          aria-label={t("nav.calendario")}
         >
           <div className="flex flex-col gap-1">
             <span className={`block h-px w-5 bg-navy transition-all duration-200 ${isMobileMenuOpen ? "translate-y-[5px] rotate-45" : ""}`} />
@@ -59,15 +69,15 @@ export function Header() {
             className="overflow-hidden border-t border-muted/20 bg-white/95 backdrop-blur-md sm:hidden"
           >
             <div className="flex flex-col gap-4 px-6 py-6">
-              {links.map((link) => (
+              {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={closeMobileMenu}
                   className="cursor-pointer text-sm font-medium text-taupe transition-colors duration-200 hover:text-navy"
                 >
-                  {link.label}
-                </Link>
+              {t(`nav.${link.label.toLowerCase()}`)}
+            </Link>
               ))}
             </div>
           </motion.nav>

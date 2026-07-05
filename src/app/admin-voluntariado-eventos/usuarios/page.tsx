@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useSWR from "swr";
 import { z } from "zod";
+import { useToastStore } from "@/components/ui/toast";
 
 interface UserEntry {
   id: string;
@@ -38,9 +39,7 @@ const inputClass =
   "w-full rounded-xl border border-muted/40 bg-white px-4 py-2.5 text-sm text-navy outline-none transition-all duration-200 placeholder:text-taupe/50 focus:border-coral/50 focus:ring-2 focus:ring-coral/15";
 
 export default function AdminUsersPage() {
-  const [createError, setCreateError] = useState<string | null>(null);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const addToast = useToastStore((s) => s.addToast);
 
   const { data: users, error: fetchError, isLoading, mutate } = useSWR<UserEntry[]>(
     "/api/admin/users",
@@ -57,9 +56,6 @@ export default function AdminUsersPage() {
   });
 
   const onCreate = async (data: CreateUserForm) => {
-    setCreateError(null);
-    setSuccessMessage(null);
-
     try {
       const res = await fetch("/api/admin/users", {
         method: "POST",
@@ -69,35 +65,32 @@ export default function AdminUsersPage() {
 
       if (!res.ok) {
         const body = await res.json();
-        setCreateError(body.error ?? "Error al crear usuario");
+        addToast(body.error ?? "Error al crear usuario", "error");
         return;
       }
 
       reset();
-      setSuccessMessage("Usuario creado correctamente");
+      addToast("Usuario creado correctamente", "success");
       mutate();
     } catch {
-      setCreateError("Error de conexión");
+      addToast("Error de conexión", "error");
     }
   };
 
   const onDelete = async (id: string) => {
-    setDeleteError(null);
-    setSuccessMessage(null);
-
     try {
       const res = await fetch(`/api/admin/users/${id}`, { method: "DELETE" });
 
       if (!res.ok) {
         const body = await res.json();
-        setDeleteError(body.error ?? "Error al eliminar usuario");
+        addToast(body.error ?? "Error al eliminar usuario", "error");
         return;
       }
 
-      setSuccessMessage("Usuario eliminado correctamente");
+      addToast("Usuario eliminado correctamente", "success");
       mutate();
     } catch {
-      setDeleteError("Error de conexión");
+      addToast("Error de conexión", "error");
     }
   };
 
@@ -112,27 +105,10 @@ export default function AdminUsersPage() {
         </h1>
       </div>
 
-      {successMessage && (
-        <div className="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-xs text-green-700">
-          {successMessage}
-        </div>
-      )}
-
-      {deleteError && (
-        <div className="mb-6 rounded-xl border border-coral/20 bg-coral/5 px-4 py-3 text-xs text-coral">
-          {deleteError}
-        </div>
-      )}
-
       <div className="mb-12 rounded-2xl border border-muted/30 bg-white p-6 shadow-xs sm:p-8">
         <h2 className="mb-6 text-lg font-semibold text-navy">Crear nuevo usuario</h2>
 
         <form onSubmit={handleSubmit(onCreate)} className="space-y-5" noValidate>
-          {createError && (
-            <div className="rounded-xl border border-coral/20 bg-coral/5 px-4 py-3 text-xs text-coral">
-              {createError}
-            </div>
-          )}
 
           <div className="grid gap-5 sm:grid-cols-2">
             <div>

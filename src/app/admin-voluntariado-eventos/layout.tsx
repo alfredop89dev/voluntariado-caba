@@ -5,13 +5,8 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useAdminStore } from "@/stores/admin-store";
 import { useShallow } from "zustand/react/shallow";
-
-const NAV_ITEMS = [
-  { href: "/admin-voluntariado-eventos/dashboard", label: "Dashboard" },
-  { href: "/admin-voluntariado-eventos", label: "Eventos" },
-  { href: "/admin-voluntariado-eventos/voluntarios", label: "Voluntarios" },
-  { href: "/admin-voluntariado-eventos/usuarios", label: "Usuarios" },
-];
+import { ADMIN } from "@/lib/config";
+import { useI18n } from "@/lib/i18n/translations-context";
 
 export default function AdminLayout({
   children,
@@ -20,6 +15,7 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { t } = useI18n();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { isAuthenticated, isLoading, username } = useAdminStore(
     useShallow((s) => ({
@@ -32,28 +28,28 @@ export default function AdminLayout({
   useEffect(() => {
     const store = useAdminStore.getState();
 
-    if (pathname === "/admin-voluntariado-eventos/login") {
+    if (pathname === ADMIN.LOGIN_PATH) {
       store.setLoading(false);
       return;
     }
 
-    fetch("/api/admin/verify")
+    fetch(ADMIN.NAV_ITEMS[0].href === ADMIN.DASHBOARD_PATH ? "/api/admin/verify" : "/api/admin/verify")
       .then(async (res) => {
         if (res.ok) {
           const body = await res.json();
           store.setAuth(body.username);
         } else {
           store.clearAuth();
-          router.replace("/admin-voluntariado-eventos/login");
+          router.replace(ADMIN.LOGIN_PATH);
         }
       })
       .catch(() => {
         store.clearAuth();
-        router.replace("/admin-voluntariado-eventos/login");
+        router.replace(ADMIN.LOGIN_PATH);
       });
   }, [pathname, router]);
 
-  if (pathname === "/admin-voluntariado-eventos/login") {
+  if (pathname === ADMIN.LOGIN_PATH) {
     return <>{children}</>;
   }
 
@@ -71,18 +67,32 @@ export default function AdminLayout({
 
   const sidebarContent = (
     <>
-      <div className="flex h-14 items-center border-b border-muted/20 px-6">
+      <div className="flex h-14 items-center justify-between border-b border-muted/20 px-6">
         <Link
-          href="/admin-voluntariado-eventos/dashboard"
+          href={ADMIN.DASHBOARD_PATH}
           className="text-sm font-semibold tracking-wide text-navy uppercase"
         >
-          Admin Panel
+          {t("admin.title")}
         </Link>
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-4">
-        {NAV_ITEMS.map((item) => {
-          const isActive = pathname === item.href;
+        {ADMIN.NAV_ITEMS.map((item) => {
+          const isExternal = "external" in item && item.external;
+          const isActive = !isExternal && pathname === item.href;
+
+          if (isExternal) {
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                className="block cursor-pointer rounded-xl px-4 py-2.5 text-sm font-medium text-taupe transition-all duration-200 hover:bg-muted/20 hover:text-navy"
+              >
+                {item.label}
+              </a>
+            );
+          }
+
           return (
             <Link
               key={item.href}
@@ -105,7 +115,7 @@ export default function AdminLayout({
           onClick={async () => {
             await fetch("/api/admin/login", { method: "DELETE" });
             useAdminStore.getState().clearAuth();
-            router.replace("/admin-voluntariado-eventos/login");
+            router.replace(ADMIN.LOGIN_PATH);
           }}
           className="cursor-pointer text-xs font-medium text-coral transition-colors duration-200 hover:text-coral/80"
         >
@@ -135,7 +145,7 @@ export default function AdminLayout({
             </div>
           </button>
           <Link
-            href="/admin-voluntariado-eventos/dashboard"
+            href={ADMIN.DASHBOARD_PATH}
             className="text-sm font-semibold tracking-wide text-navy uppercase"
           >
             Admin Panel
@@ -146,8 +156,23 @@ export default function AdminLayout({
         {mobileOpen && (
           <div className="border-b border-muted/20 bg-white px-3 pb-4 lg:hidden">
             <nav className="space-y-1">
-              {NAV_ITEMS.map((item) => {
-                const isActive = pathname === item.href;
+              {ADMIN.NAV_ITEMS.map((item) => {
+                const isExternal = "external" in item && item.external;
+                const isActive = !isExternal && pathname === item.href;
+
+                if (isExternal) {
+                  return (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="block cursor-pointer rounded-xl px-4 py-2.5 text-sm font-medium text-taupe transition-all duration-200 hover:bg-muted/20 hover:text-navy"
+                    >
+                      {item.label}
+                    </a>
+                  );
+                }
+
                 return (
                   <Link
                     key={item.href}
@@ -167,7 +192,7 @@ export default function AdminLayout({
                 onClick={async () => {
                   await fetch("/api/admin/login", { method: "DELETE" });
                   useAdminStore.getState().clearAuth();
-                  router.replace("/admin-voluntariado-eventos/login");
+                  router.replace(ADMIN.LOGIN_PATH);
                 }}
                 className="w-full cursor-pointer rounded-xl px-4 py-2.5 text-left text-sm font-medium text-coral transition-colors duration-200 hover:bg-muted/20"
               >

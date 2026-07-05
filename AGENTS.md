@@ -69,8 +69,8 @@ npm run lint      # ESLint
 
 ## Notas
 
-### Datos demo
-Sin configurar MONGODB_URI, el sitio funciona con 4 eventos hardcodeados en `src/lib/demo-events.ts`. Las API routes devuelven 503.
+### MongoDB requerido
+El sitio requiere `MONGODB_URI` configurado en `.env.local`. Sin conexión a MongoDB las API routes devuelven 503.
 
 ### Hydration
 Next.js 16 + Turbopack puede agregar atributos `__processed_*` al `<body>`. Se manejó con `suppressHydrationWarning`.
