@@ -5,7 +5,6 @@ import {
   useContext,
   useState,
   useCallback,
-  useEffect,
   type ReactNode,
 } from "react";
 import es from "./es.json";
@@ -38,15 +37,15 @@ function resolveNested(obj: unknown, path: string): unknown {
 
 export const I18nContext = createContext<I18nContextValue | null>(null);
 
-export function TranslationProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
+function getInitialLocale(): Locale {
+  if (typeof document === "undefined") return DEFAULT_LOCALE;
+  const cookie = getCookie(LOCALE_COOKIE);
+  if (cookie === "es" || cookie === "en") return cookie;
+  return DEFAULT_LOCALE;
+}
 
-  useEffect(() => {
-    const cookie = getCookie(LOCALE_COOKIE);
-    if (cookie === "es" || cookie === "en") {
-      setLocaleState(cookie);
-    }
-  }, []);
+export function TranslationProvider({ children }: { children: ReactNode }) {
+  const [locale, setLocaleState] = useState<Locale>(getInitialLocale);
 
   const setLocale = useCallback((newLocale: Locale) => {
     setLocaleState(newLocale);

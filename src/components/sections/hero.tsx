@@ -3,82 +3,91 @@
 import { motion } from "motion/react";
 import { useI18n } from "@/lib/i18n/translations-context";
 
-const starPath = "M0,-5 L1.5,-1.5 L5,-1.5 L2.5,1 L3.5,5 L0,2.5 L-3.5,5 L-2.5,1 L-5,-1.5 L-1.5,-1.5 Z";
+function mulberry32(seed: number) {
+  return () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.2 },
-  },
-};
+const rng = mulberry32(42);
 
-const item = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0 },
-};
-
-const starItem = {
-  hidden: { opacity: 0, scale: 0, rotate: -45 },
-  show: { opacity: 0.35, scale: 1, rotate: 0 },
-};
+const stars = Array.from({ length: 8 }, (_, i) => ({
+  top: `${10 + rng() * 80}%`,
+  left: `${5 + rng() * 90}%`,
+  size: 12 + rng() * 16,
+  delay: i * 0.15,
+}));
 
 export function Hero() {
   const { t } = useI18n();
 
   return (
-    <section className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-navy px-6 sm:min-h-[80dvh] lg:min-h-[70dvh]">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(248,112,96,0.06)_0%,transparent_60%)]" />
+    <section className="relative flex min-h-[90dvh] items-center justify-center overflow-hidden bg-navy px-6 sm:min-h-[85dvh]">
+
+      {stars.map((star, i) => (
+        <motion.div
+          key={i}
+          className="absolute text-white/20"
+          style={{ top: star.top, left: star.left }}
+          initial={{ opacity: 0, scale: 0, rotate: -45 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ delay: 0.7 + star.delay, duration: 0.6, ease: "easeOut" }}
+        >
+          <svg
+            width={star.size}
+            height={star.size}
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="animate-[float_3s_ease-in-out_infinite]"
+            style={{ animationDelay: `${star.delay}s` }}
+          >
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        </motion.div>
+      ))}
 
       <motion.div
-        variants={container}
+        className="relative z-10 mx-auto max-w-3xl text-center"
         initial="hidden"
-        animate="show"
-        className="relative mx-auto max-w-2xl text-center"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
+        }}
       >
-        <motion.p
-          variants={item}
-          className="mb-5 text-xs font-medium text-coral uppercase tracking-[0.25em]"
+        <motion.span
+          className="mb-6 inline-block rounded-full border border-coral/20 bg-coral/8 px-4 py-1.5 text-[11px] font-medium tracking-[0.2em] text-coral uppercase"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+          }}
         >
           {t("hero.badge")}
-        </motion.p>
+        </motion.span>
+
         <motion.h1
-          variants={item}
-          className="mb-6 text-4xl font-light leading-tight text-white sm:text-5xl lg:text-6xl"
+          className="text-4xl font-light leading-[1.15] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl"
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+          }}
         >
           {t("hero.title")}
         </motion.h1>
+
         <motion.p
-          variants={item}
-          className="mx-auto max-w-md text-base font-light leading-relaxed text-muted/70"
+          className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/50 sm:text-lg"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+          }}
         >
           {t("hero.description")}
         </motion.p>
-
-        <motion.div
-          variants={{
-            hidden: { opacity: 0 },
-            show: { opacity: 1, transition: { staggerChildren: 0.06, delayChildren: 0.7 } },
-          }}
-          initial="hidden"
-          animate="show"
-          className="mt-12 flex items-center justify-center gap-2"
-        >
-          {[...Array(8)].map((_, i) => (
-            <motion.svg
-              key={i}
-              variants={starItem}
-              viewBox="-5 -5 10 10"
-              width={16}
-              height={16}
-              className="text-white"
-              fill="currentColor"
-              style={{ animation: `float ${2 + i * 0.3}s ease-in-out infinite`, animationDelay: `${i * 0.2}s` }}
-            >
-              <path d={starPath} />
-            </motion.svg>
-          ))}
-        </motion.div>
       </motion.div>
     </section>
   );

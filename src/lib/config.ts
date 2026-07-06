@@ -1,8 +1,3 @@
-export const SITE = {
-  name: "Red de Voluntarios",
-  tagline: "Juntos por la reconstrucción de Venezuela",
-} as const;
-
 export const SECTION_IDS = {
   calendario: "calendario",
   voluntariado: "voluntariado",
@@ -29,22 +24,14 @@ export const ADMIN = {
   SESSION_MAX_AGE: Number(process.env.ADMIN_SESSION_MAX_AGE) || 86400,
 } as const;
 
-export const API = {
-  BASE: "/api",
-  EVENTS: "/api/events",
-  VOLUNTEERS: "/api/volunteers",
-  ADMIN: {
-    EVENTS: "/api/admin/events",
-    VOLUNTEERS: "/api/admin/volunteers",
-    USERS: "/api/admin/users",
-    LOGIN: "/api/admin/login",
-    VERIFY: "/api/admin/verify",
-  },
-} as const;
-
 export const RATE_LIMIT = {
   WINDOW_MS: Number(process.env.RATE_LIMIT_WINDOW_MS) || 60_000,
   MAX_REQUESTS: Number(process.env.RATE_LIMIT_MAX_REQUESTS) || 10,
+} as const;
+
+export const ADMIN_RATE_LIMIT = {
+  WINDOW_MS: 60_000,
+  MAX_REQUESTS: 30,
 } as const;
 
 export const CALENDAR = {

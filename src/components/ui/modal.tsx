@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
+import { X } from "lucide-react";
 import { useEffect } from "react";
 import type { ReactNode } from "react";
 
@@ -46,9 +47,7 @@ export function Modal({ open, title, onClose, children }: ModalProps) {
                 onClick={onClose}
                 className="flex size-8 cursor-pointer items-center justify-center rounded-xl text-taupe transition-colors duration-200 hover:bg-muted/20 hover:text-navy"
               >
-                <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <X size={16} />
               </button>
             </div>
             {children}

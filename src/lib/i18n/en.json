@@ -12,9 +12,7 @@
   "hero": {
     "badge": "Volunteer network in CABA for Venezuela",
     "title": "Volunteer network in CABA for Venezuela",
-    "description": "We are a community of Venezuelans and Argentines organizing events, collecting donations, and providing support to earthquake victims in Venezuela.",
-    "cta_calendario": "View events",
-    "cta_voluntariado": "Join as volunteer"
+    "description": "We are a community of Venezuelans and Argentines organizing events, collecting donations, and providing support to earthquake victims in Venezuela."
   },
   "about": {
     "badge": "About us",
@@ -59,12 +57,12 @@
       "submitting": "Sending...",
       "success_title": "Thank you for registering!",
       "success_message": "We will contact you soon.",
-        "errors": {
-          "name_required": "Name is required",
-          "email_required": "Email is required",
-          "email_invalid": "Invalid email"
-        },
-        "submit_error": "An error occurred while registering. Please try again."
+      "errors": {
+        "name_required": "Name is required",
+        "email_required": "Email is required",
+        "email_invalid": "Invalid email"
+      },
+      "submit_error": "An error occurred while registering. Please try again."
     }
   },
   "donations": {
@@ -73,7 +71,6 @@
     "cta": "I want to donate"
   },
   "footer": {
-    "tagline": "Together for the reconstruction of Venezuela",
     "description": "We are a community of Venezuelans and Argentines in CABA organizing events, collecting donations, and supporting earthquake victims in Venezuela.",
     "links_title": "Links",
     "contact_title": "Contact",
@@ -82,20 +79,164 @@
     "follow_us": "Follow us",
     "rights": "All rights reserved."
   },
-  "event_detail": {
-    "back": "Back to calendar",
-    "other_events": "Other",
-    "other_events_accent": "events"
-  },
   "admin": {
     "title": "Admin Panel",
-    "logout": "Log out",
+    "layout": {
+      "logout": "Log out",
+      "mobile_title": "Admin Panel"
+    },
     "nav": {
       "dashboard": "Dashboard",
       "events": "Events",
       "volunteers": "Volunteers",
       "users": "Users",
-      "view_landing": "View landing"
+      "landing": "View landing"
+    },
+    "login": {
+      "title": "Sign in",
+      "username": "Username",
+      "password": "Password",
+      "login_button": "Sign in",
+      "logging_in": "Signing in...",
+      "error_invalid": "Invalid username or password",
+      "error_connection": "Connection error"
+    },
+    "dashboard": {
+      "badge": "Admin",
+      "title": "Control",
+      "title_accent": "panel",
+      "events_card": "Events",
+      "volunteers_card": "Volunteers",
+      "users_card": "Users",
+      "upcoming": "upcoming",
+      "pending": "pending",
+      "admins": "administrators",
+      "volunteer_status_title": "Volunteers by status",
+      "upcoming_events_title": "Upcoming events",
+      "status_pending": "Pending",
+      "status_contacted": "Contacted",
+      "status_approved": "Approved",
+      "status_rejected": "Rejected",
+      "no_upcoming": "No upcoming events",
+      "error_loading": "Error loading some data",
+      "retry": "Retry"
+    },
+    "events": {
+      "badge": "Admin",
+      "title": "Event",
+      "title_accent": "management",
+      "table_title": "Existing events",
+      "search_placeholder": "Search events...",
+      "create": "Create event",
+      "edit": "Edit",
+      "delete": "Delete",
+      "no_results_search": "No events matched your search.",
+      "no_results": "No events created yet.",
+      "create_modal_title": "Create new event",
+      "edit_modal_title": "Edit event",
+      "create_submit": "Create event",
+      "edit_submit": "Save changes",
+      "saving": "Saving...",
+      "created": "Event created successfully",
+      "updated": "Event updated successfully",
+      "deleted": "Event deleted successfully",
+      "delete_confirm_title": "Delete event",
+      "delete_confirm_message": "Are you sure? This action cannot be undone.",
+      "delete_confirm_label": "Delete",
+      "cancel_label": "Cancel",
+      "export_csv": "Export CSV",
+      "page": "Page",
+      "of": "of",
+      "previous": "Previous",
+      "next": "Next",
+      "status_active": "Active",
+      "table": {
+        "title": "Title",
+        "organizer": "Organizer",
+        "status": "Status",
+        "date": "Date",
+        "time": "Time",
+        "actions": "Actions"
+      },
+      "form": {
+        "title": "Title",
+        "organizer": "Organizer",
+        "date": "Date",
+        "time": "Time",
+        "location": "Location",
+        "status": "Status",
+        "description": "Description",
+        "flyer": "Flyer",
+        "image": "Image",
+        "logo": "Logo (URL)",
+        "instagram": "Instagram",
+        "phone": "Phone",
+        "google_maps": "Google Maps (URL)",
+        "or_url": "Or enter a URL",
+        "active_default": "Active (default)"
+      }
+    },
+    "volunteers": {
+      "badge": "Admin",
+      "title": "Volunteer",
+      "title_accent": "applications",
+      "total": "Total",
+      "search_placeholder": "Search by name, email or location...",
+      "filter_all": "All",
+      "status_pending": "Pending",
+      "status_contacted": "Contacted",
+      "status_approved": "Approved",
+      "status_rejected": "Rejected",
+      "export_csv": "Export CSV",
+      "delete": "Delete",
+      "delete_confirm_title": "Delete application",
+      "delete_confirm_message": "Are you sure? This action cannot be undone.",
+      "delete_confirm_label": "Delete",
+      "cancel_label": "Cancel",
+      "no_results_filter": "No applications match that filter.",
+      "no_results": "No volunteer applications yet.",
+      "error": "Error loading applications",
+      "status_updated": "Status updated to",
+      "error_update": "Error updating status",
+      "deleted": "Application deleted successfully",
+      "error_delete": "Error deleting application",
+      "error_connection": "Connection error",
+      "event_field": "Event of interest",
+      "phone_field": "Phone",
+      "organizer_field": "Organization",
+      "instagram_field": "Instagram",
+      "location_field": "Location",
+      "skills_field": "Skills",
+      "availability_field": "Availability"
+    },
+    "users": {
+      "badge": "Admin",
+      "title": "User",
+      "title_accent": "management",
+      "create_title": "Create new user",
+      "username": "Username",
+      "password": "Password",
+      "create_button": "Create user",
+      "creating": "Creating...",
+      "created": "User created successfully",
+      "error_create": "Error creating user",
+      "search_placeholder": "Search user...",
+      "table_title": "Users",
+      "table_username": "Username",
+      "table_role": "Role",
+      "table_created": "Created",
+      "table_actions": "Action",
+      "delete": "Delete",
+      "you": "You",
+      "deleted": "User deleted successfully",
+      "error_delete": "Error deleting user",
+      "error_connection": "Connection error",
+      "no_results_search": "No users matched your search.",
+      "no_results": "No users created yet.",
+      "error_load": "Error loading users",
+      "cannot_delete_self": "You cannot delete your own user",
+      "username_min": "Minimum 3 characters",
+      "password_min": "Minimum 6 characters"
     }
   }
 }

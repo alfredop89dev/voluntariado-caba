@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/mongodb";
 import { Event } from "@/lib/models/event";
 import { eventSchema } from "@/lib/schemas";
 import { checkRateLimit } from "@/lib/rate-limiter";
+import { mapEvent } from "@/lib/api-utils";
 import type { IEventData } from "@/lib/models/event";
 import { headers } from "next/headers";
 
@@ -14,10 +15,7 @@ export async function GET() {
 
   try {
     const events = await Event.find().sort({ date: 1 }).lean();
-    const mapped: IEventData[] = events.map((e: Record<string, unknown>) => {
-      const { _id, ...rest } = e;
-      return { id: String(_id), ...rest } as unknown as IEventData;
-    });
+    const mapped: IEventData[] = events.map((e) => mapEvent(e as Record<string, unknown>));
     return NextResponse.json(mapped);
   } catch {
     return NextResponse.json({ error: "Error al obtener eventos" }, { status: 500 });

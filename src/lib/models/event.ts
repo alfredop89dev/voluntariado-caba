@@ -1,5 +1,7 @@
 import mongoose, { Schema, type Document } from "mongoose";
 
+export type EventStatus = "activo" | "cerrado" | "pendiente" | "pospuesto";
+
 export interface IEventData {
   id: string;
   title: string;
@@ -14,6 +16,7 @@ export interface IEventData {
   instagram?: string;
   googleMaps?: string;
   phone?: string;
+  status?: EventStatus;
 }
 
 export interface IEvent extends Document, IEventData {}
@@ -32,6 +35,7 @@ const EventSchema = new Schema<IEvent>(
     instagram: { type: String },
     googleMaps: { type: String },
     phone: { type: String },
+    status: { type: String, enum: ["activo", "cerrado", "pendiente", "pospuesto"], default: "activo" },
   },
   { timestamps: true },
 );

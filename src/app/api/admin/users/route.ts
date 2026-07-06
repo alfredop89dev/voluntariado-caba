@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { headers } from "next/headers";
 import { connectDB } from "@/lib/mongodb";
 import { User, hashPassword, type IUserData } from "@/lib/models/user";
-import { verifyToken } from "@/lib/auth";
+import { checkAuth } from "@/lib/auth-utils";
+import { checkAdminRateLimit } from "@/lib/rate-limiter";
 import { z } from "zod";
 
 const createUserSchema = z.object({
@@ -10,15 +11,6 @@ const createUserSchema = z.object({
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres").max(100),
   role: z.string().default("admin"),
 });
-
-async function checkAuth(): Promise<NextResponse | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_token")?.value;
-  if (!token) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-  const { valid } = verifyToken(token);
-  if (!valid) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-  return null;
-}
 
 export async function GET() {
   const authError = await checkAuth();
@@ -47,6 +39,10 @@ export async function GET() {
 export async function POST(request: Request) {
   const authError = await checkAuth();
   if (authError) return authError;
+
+  const ip = (await headers()).get("x-forwarded-for") ?? "unknown";
+  const rateLimitResponse = checkAdminRateLimit(ip);
+  if (rateLimitResponse) return rateLimitResponse;
 
   const db = await connectDB();
   if (!db) {

@@ -3,146 +3,204 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "motion/react";
-import { Button } from "@/components/ui/button";
-import { useVolunteerSubmit } from "@/hooks/use-volunteer";
-import { volunteerSchema } from "@/lib/schemas";
+import { CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { z } from "zod";
 import { useI18n } from "@/lib/i18n/translations-context";
-import type { z } from "zod";
+
+const volunteerSchema = z.object({
+  name: z.string().min(1, "El nombre es obligatorio").max(100),
+  email: z.string().email("Correo inválido"),
+  phone: z.string().max(20).optional().or(z.literal("")),
+  interestedEvent: z.string().max(200).optional().or(z.literal("")),
+  organizer: z.string().max(100).optional().or(z.literal("")),
+  instagram: z.string().max(200).optional().or(z.literal("")),
+  location: z.string().max(200).optional().or(z.literal("")),
+  skills: z.string().max(500).optional().or(z.literal("")),
+  availability: z.string().max(500).optional().or(z.literal("")),
+});
 
 type VolunteerFormData = z.infer<typeof volunteerSchema>;
 
 const inputClass =
-  "w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/30 focus:border-coral/60 focus:bg-white/15 focus:ring-2 focus:ring-coral/20";
-
-const labelClass =
-  "mb-1.5 block text-[11px] font-semibold text-white/80 uppercase tracking-[0.15em]";
+  "w-full border-b border-muted/40 bg-transparent px-0 py-3 text-sm text-navy outline-none transition-all duration-200 placeholder:text-taupe/40 focus:border-coral";
 
 export function VolunteerForm() {
   const { t } = useI18n();
-  const [submitted, setSubmitted] = useState(false);
-  const { submit, isSubmitting, error: submitError } = useVolunteerSubmit();
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm<VolunteerFormData>({
     resolver: zodResolver(volunteerSchema),
   });
 
   const onSubmit = async (data: VolunteerFormData) => {
+    setError(null);
+
     try {
-      await submit(data);
-      setSubmitted(true);
+      const body = Object.fromEntries(
+        Object.entries(data).filter(([, v]) => v !== ""),
+      );
+
+      const res = await fetch("/api/volunteers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        setError(err.error ?? t("volunteer.form.submit_error"));
+        return;
+      }
+
+      setSuccess(true);
+      reset();
     } catch {
-      /* error handled via submitError from SWR */
+      setError(t("volunteer.form.submit_error"));
     }
   };
 
-  if (submitted) {
+  if (success) {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="rounded-2xl border border-white/15 bg-white/10 p-8 text-center backdrop-blur-sm"
+        className="flex flex-col items-center py-12 text-center"
       >
-        <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-coral/20">
-          <svg className="size-6 text-coral" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <p className="mb-2 text-lg font-semibold text-white">{t("volunteer.form.success_title")}</p>
-        <p className="text-sm text-white/60">{t("volunteer.form.success_message")}</p>
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 200, damping: 15 }}
+          className="mb-5 flex size-14 items-center justify-center rounded-full bg-coral/10"
+        >
+          <CheckCircle2 size={28} className="text-coral" />
+        </motion.div>
+        <h3 className="mb-1.5 text-lg font-semibold text-navy">
+          {t("volunteer.form.success_title")}
+        </h3>
+        <p className="text-sm text-taupe/70">
+          {t("volunteer.form.success_message")}
+        </p>
       </motion.div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-      {submitError && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl border border-coral/30 bg-coral/10 px-4 py-3 text-xs text-coral"
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-3" noValidate>
+      <AnimatePresence>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden rounded-lg border border-coral/15 bg-coral/5 px-4 py-3"
+          >
+            <p className="text-xs text-coral">{error}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="grid gap-0 sm:grid-cols-2">
+        <div className="border-b border-muted/20 sm:border-r sm:border-b-0">
+          <input
+            {...register("name")}
+            placeholder={t("volunteer.form.name")}
+            className={inputClass}
+          />
+          {errors.name && <p className="px-0 pb-2 text-[11px] text-coral/80">{errors.name.message}</p>}
+        </div>
+        <div className="border-b border-muted/20">
+          <input
+            type="email"
+            {...register("email")}
+            placeholder={t("volunteer.form.email")}
+            className={inputClass}
+          />
+          {errors.email && <p className="px-0 pb-2 text-[11px] text-coral/80">{errors.email.message}</p>}
+        </div>
+      </div>
+
+      <div className="grid gap-0 sm:grid-cols-2">
+        <div className="border-b border-muted/20 sm:border-r sm:border-b-0">
+          <input
+            {...register("phone")}
+            placeholder={t("volunteer.form.phone")}
+            className={inputClass}
+          />
+        </div>
+        <div className="border-b border-muted/20">
+          <input
+            {...register("interestedEvent")}
+            placeholder={t("volunteer.form.event")}
+            className={inputClass}
+          />
+        </div>
+      </div>
+
+      <div className="grid gap-0 sm:grid-cols-2">
+        <div className="border-b border-muted/20 sm:border-r sm:border-b-0">
+          <input
+            {...register("organizer")}
+            placeholder={t("volunteer.form.organizer")}
+            className={inputClass}
+          />
+        </div>
+        <div className="border-b border-muted/20">
+          <input
+            {...register("instagram")}
+            placeholder={t("volunteer.form.instagram")}
+            className={inputClass}
+          />
+        </div>
+      </div>
+
+      <div className="border-b border-muted/20">
+        <input
+          {...register("location")}
+          placeholder={t("volunteer.form.location")}
+          className={inputClass}
+        />
+      </div>
+
+      <div className="grid gap-0 sm:grid-cols-2">
+        <div className="border-b border-muted/20 sm:border-r sm:border-b-0">
+          <input
+            {...register("skills")}
+            placeholder={t("volunteer.form.skills")}
+            className={inputClass}
+          />
+        </div>
+        <div className="border-b border-muted/20">
+          <input
+            {...register("availability")}
+            placeholder={t("volunteer.form.availability")}
+            className={inputClass}
+          />
+        </div>
+      </div>
+
+      <div className="pt-5">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-navy px-6 py-3 text-sm font-medium text-white transition-all duration-200 hover:bg-navy-light active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50"
         >
-          {t("volunteer.form.submit_error")}
-        </motion.div>
-      )}
-
-      <div>
-        <label htmlFor="name" className={labelClass}>
-          {t("volunteer.form.name")}
-        </label>
-        <input id="name" {...register("name")} className={inputClass} />
-        {errors.name && (
-          <p className="mt-1.5 text-xs text-coral/90">{t("volunteer.form.errors.name_required")}</p>
-        )}
+          {isSubmitting ? (
+            <>
+              <div className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+              {t("volunteer.form.submitting")}
+            </>
+          ) : (
+            t("volunteer.form.submit")
+          )}
+        </button>
       </div>
-
-      <div>
-        <label htmlFor="email" className={labelClass}>
-          {t("volunteer.form.email")}
-        </label>
-        <input id="email" type="email" {...register("email")} className={inputClass} />
-        {errors.email && (
-          <p className="mt-1.5 text-xs text-coral/90">{t("volunteer.form.errors.email_required")}</p>
-        )}
-      </div>
-
-      <div>
-        <label htmlFor="interestedEvent" className={labelClass}>
-          {t("volunteer.form.event")}
-        </label>
-        <input id="interestedEvent" {...register("interestedEvent")} className={inputClass} />
-      </div>
-
-      <div>
-        <label htmlFor="organizer" className={labelClass}>
-          {t("volunteer.form.organizer")}
-        </label>
-        <input id="organizer" {...register("organizer")} className={inputClass} />
-      </div>
-
-      <div>
-        <label htmlFor="instagram" className={labelClass}>
-          {t("volunteer.form.instagram")}
-        </label>
-        <input id="instagram" {...register("instagram")} className={inputClass} />
-      </div>
-
-      <div>
-        <label htmlFor="phone" className={labelClass}>
-          {t("volunteer.form.phone")}
-        </label>
-        <input id="phone" {...register("phone")} className={inputClass} />
-      </div>
-
-      <div>
-        <label htmlFor="location" className={labelClass}>
-          {t("volunteer.form.location")}
-        </label>
-        <input id="location" {...register("location")} className={inputClass} />
-      </div>
-
-      <div>
-        <label htmlFor="skills" className={labelClass}>
-          {t("volunteer.form.skills")}
-        </label>
-        <input id="skills" {...register("skills")} className={inputClass} />
-      </div>
-
-      <div>
-        <label htmlFor="availability" className={labelClass}>
-          {t("volunteer.form.availability")}
-        </label>
-        <input id="availability" {...register("availability")} className={inputClass} />
-      </div>
-
-      <Button type="submit" disabled={isSubmitting} className="w-full" size="lg">
-        {isSubmitting ? t("volunteer.form.submitting") : t("volunteer.form.submit")}
-      </Button>
     </form>
   );
 }

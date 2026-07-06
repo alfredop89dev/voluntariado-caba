@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
+import { TriangleAlert } from "lucide-react";
 import { useEffect } from "react";
 
 interface ConfirmDialogProps {
@@ -53,9 +54,7 @@ export function ConfirmDialog({
             className="w-full max-w-sm rounded-2xl border border-muted/30 bg-white p-6 shadow-lg"
           >
             <div className="mb-2 flex size-10 items-center justify-center rounded-xl bg-coral/10 text-coral">
-              <svg className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-              </svg>
+              <TriangleAlert size={20} />
             </div>
             <h3 className="mb-1 text-base font-semibold text-navy">{title}</h3>
             <p className="mb-6 text-sm text-taupe">{message}</p>

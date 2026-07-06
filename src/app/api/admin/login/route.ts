@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { connectDB } from "@/lib/mongodb";
 import { User, verifyPassword, hashPassword } from "@/lib/models/user";
 import { createToken } from "@/lib/auth";
+import { checkAdminRateLimit } from "@/lib/rate-limiter";
 import { ADMIN } from "@/lib/config";
 
 export async function DELETE() {
@@ -19,6 +20,10 @@ export async function DELETE() {
 
 export async function POST(request: Request) {
   try {
+    const ip = (await headers()).get("x-forwarded-for") ?? "unknown";
+    const rateLimitResponse = checkAdminRateLimit(ip);
+    if (rateLimitResponse) return rateLimitResponse;
+
     const body = await request.json();
     const { username, password } = body;
 

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { Event } from "@/lib/models/event";
 import { eventSchema } from "@/lib/schemas";
-import type { IEventData } from "@/lib/models/event";
+import { mapEvent } from "@/lib/api-utils";
 
 export async function GET(
   _request: Request,
@@ -19,10 +19,7 @@ export async function GET(
     if (!event) {
       return NextResponse.json({ error: "Evento no encontrado" }, { status: 404 });
     }
-    const e = event as Record<string, unknown>;
-    const { _id, ...rest } = e;
-    const mapped: IEventData = { id: String(_id), ...rest } as unknown as IEventData;
-    return NextResponse.json(mapped);
+    return NextResponse.json(mapEvent(event as Record<string, unknown>));
   } catch {
     return NextResponse.json({ error: "Error al obtener evento" }, { status: 500 });
   }

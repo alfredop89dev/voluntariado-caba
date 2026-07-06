@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "motion/react";
 
 interface EventCountdownProps {
   date: Date;
   time?: string;
+  variant?: "default" | "hero";
 }
 
 function getTimeRemaining(target: Date) {
@@ -20,12 +21,15 @@ function getTimeRemaining(target: Date) {
   return { days, hours, minutes, seconds, expired: false };
 }
 
-export function EventCountdown({ date, time }: EventCountdownProps) {
-  const target = new Date(date);
-  if (time) {
-    const [h, m] = time.split(":").map(Number);
-    target.setHours(h, m, 0, 0);
-  }
+export function EventCountdown({ date, time, variant = "default" }: EventCountdownProps) {
+  const target = useMemo(() => {
+    const d = new Date(date);
+    if (time) {
+      const [h, m] = time.split(":").map(Number);
+      d.setHours(h, m, 0, 0);
+    }
+    return d;
+  }, [date, time]);
 
   const [remaining, setRemaining] = useState(() => getTimeRemaining(target));
 
@@ -46,7 +50,7 @@ export function EventCountdown({ date, time }: EventCountdownProps) {
   ];
 
   return (
-    <div className="mb-10 flex items-center justify-center gap-3 sm:gap-5">
+    <div className="flex items-center justify-center gap-3 sm:gap-5">
       {units.map((unit, i) => (
         <div key={unit.label} className="flex flex-col items-center">
           <motion.span
@@ -54,15 +58,15 @@ export function EventCountdown({ date, time }: EventCountdownProps) {
             initial={{ y: 8, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="text-2xl font-bold text-navy sm:text-3xl"
+            className={`text-2xl font-bold sm:text-3xl ${variant === "hero" ? "text-white" : "text-navy"}`}
           >
             {String(unit.value).padStart(2, "0")}
           </motion.span>
-          <span className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-taupe">
+          <span className={`mt-0.5 text-[10px] font-medium uppercase tracking-wider ${variant === "hero" ? "text-white/50" : "text-taupe"}`}>
             {unit.label}
           </span>
           {i < units.length - 1 && (
-            <span className="hidden text-lg font-bold text-muted sm:block">:</span>
+            <span className={`hidden text-lg font-bold sm:block ${variant === "hero" ? "text-white/20" : "text-muted"}`}>:</span>
           )}
         </div>
       ))}

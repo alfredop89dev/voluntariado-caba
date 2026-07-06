@@ -1,49 +1,52 @@
 "use client";
 
-"use client";
-
+import { Heart } from "lucide-react";
 import { motion } from "motion/react";
 import { FadeIn } from "@/components/ui/fade-in";
-import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n/translations-context";
-
-const DONATIONS_URL = process.env.NEXT_PUBLIC_DONATIONS_URL;
 
 export function DonationsSection() {
   const { t } = useI18n();
+  const donationUrl = process.env.NEXT_PUBLIC_DONATIONS_URL;
 
-  if (!DONATIONS_URL) return null;
+  if (!donationUrl) return null;
 
   return (
-    <section id="donaciones" className="relative overflow-hidden bg-white px-6 py-24 sm:py-32">
-      <div className="absolute -top-24 left-1/2 size-96 -translate-x-1/2 rounded-full bg-coral/3 blur-3xl" />
+    <section id="donaciones" className="relative overflow-hidden bg-navy px-6 py-24 sm:py-32">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(248,112,96,0.08)_0%,_transparent_60%)]" />
 
-      <div className="relative mx-auto max-w-xl text-center">
+      <div className="relative mx-auto max-w-2xl text-center">
         <FadeIn>
-          <p className="mb-3 text-xs font-medium text-coral uppercase tracking-[0.2em]">
-            {t("nav.donaciones")}
-          </p>
-          <h2 className="mb-4 text-3xl font-light text-navy sm:text-4xl">
+          <div className="mb-6 inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5">
+            <Heart size={12} className="text-coral" />
+            <span className="text-[11px] font-medium tracking-[0.2em] text-white/60 uppercase">
+              {t("donations.title")}
+            </span>
+          </div>
+
+          <h2 className="text-3xl font-light leading-tight text-white sm:text-4xl">
             {t("donations.title")}
           </h2>
-          <p className="mb-10 text-sm font-light leading-relaxed text-taupe">
+
+          <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-white/50">
             {t("donations.description")}
           </p>
-        </FadeIn>
 
-        <FadeIn delay={0.1}>
-          <motion.a
-            href={DONATIONS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <motion.div
+            className="mt-8"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="inline-block"
           >
-            <Button variant="secondary" size="lg">
+            <a
+              href={donationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl bg-coral px-8 py-3 text-sm font-medium text-white shadow-lg shadow-coral/25 transition-all duration-200 hover:bg-coral/90 hover:shadow-xl hover:shadow-coral/30"
+            >
+              <Heart size={14} />
               {t("donations.cta")}
-            </Button>
-          </motion.a>
+            </a>
+          </motion.div>
         </FadeIn>
       </div>
     </section>

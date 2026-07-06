@@ -14,7 +14,7 @@ export function CardImage({ src, title, sizes }: CardImageProps) {
 
   if (!src || error) {
     return (
-      <div className="flex size-full items-center justify-center bg-gradient-to-br from-navy/5 via-white to-muted/20">
+      <div className="flex size-full items-center justify-center bg-gradient-to-br from-navy/5 via-warm to-muted/20">
         <span className="select-none text-[clamp(3rem,8vw,5rem)] font-bold text-muted/30">
           {title.charAt(0).toUpperCase()}
         </span>

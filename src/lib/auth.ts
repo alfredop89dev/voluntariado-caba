@@ -17,7 +17,10 @@ export function createToken(username: string): string {
   return `${Buffer.from(payload).toString("base64url")}.${signature}`;
 }
 
-export function verifyToken(token: string): { username: string; valid: boolean } {
+export function verifyToken(
+  token: string,
+  maxAgeMs?: number,
+): { username: string; valid: boolean } {
   try {
     const parts = token.split(".");
     if (parts.length !== 2) return { username: "", valid: false };
@@ -25,17 +28,22 @@ export function verifyToken(token: string): { username: string; valid: boolean }
     const payload = Buffer.from(encodedPayload, "base64url").toString();
     const expected = crypto.createHmac("sha256", getSecret()).update(payload).digest("hex");
     if (signature !== expected) return { username: "", valid: false };
-    const username = payload.split(":")[0];
+
+    const colonIndex = payload.lastIndexOf(":");
+    const username = payload.slice(0, colonIndex);
+    const timestamp = payload.slice(colonIndex + 1);
+
     if (!username) return { username: "", valid: false };
+
+    if (maxAgeMs !== undefined && timestamp) {
+      const elapsed = Date.now() - Number(timestamp);
+      if (elapsed >= maxAgeMs) return { username: "", valid: false };
+    }
+
     return { username, valid: true };
   } catch {
     return { username: "", valid: false };
   }
 }
 
-export function getTokenFromRequest(request: Request): string | null {
-  const cookieHeader = request.headers.get("cookie");
-  if (!cookieHeader) return null;
-  const match = cookieHeader.match(/admin_token=([^;]+)/);
-  return match?.[1] ?? null;
-}
+

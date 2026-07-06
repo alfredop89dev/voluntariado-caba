@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useSWR from "swr";
+import { Search } from "lucide-react";
 import { z } from "zod";
+import { fetchJson, formatDate } from "@/lib/api-utils";
 import { useToastStore } from "@/components/ui/toast";
+import { useAdminStore } from "@/stores/admin-store";
+import { useI18n } from "@/lib/i18n/translations-context";
 
 interface UserEntry {
   id: string;
@@ -21,29 +25,28 @@ const createUserSchema = z.object({
 
 type CreateUserForm = z.infer<typeof createUserSchema>;
 
-const fetcher = async (url: string) => {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Error al cargar datos");
-  return res.json();
-};
-
-function formatDate(date: Date | string) {
-  return new Date(date).toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
 const inputClass =
   "w-full rounded-xl border border-muted/40 bg-white px-4 py-2.5 text-sm text-navy outline-none transition-all duration-200 placeholder:text-taupe/50 focus:border-coral/50 focus:ring-2 focus:ring-coral/15";
 
 export default function AdminUsersPage() {
+  const { t } = useI18n();
   const addToast = useToastStore((s) => s.addToast);
+  const currentUsername = useAdminStore((s) => s.username);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data: users, error: fetchError, isLoading, mutate } = useSWR<UserEntry[]>(
     "/api/admin/users",
-    fetcher,
+    fetchJson,
+  );
+
+  const query = searchQuery.toLowerCase().trim();
+
+  const filteredUsers = useMemo(
+    () =>
+      (users ?? []).filter(
+        (u) => !query || u.username.toLowerCase().includes(query),
+      ),
+    [users, query],
   );
 
   const {
@@ -65,15 +68,15 @@ export default function AdminUsersPage() {
 
       if (!res.ok) {
         const body = await res.json();
-        addToast(body.error ?? "Error al crear usuario", "error");
+        addToast(body.error ?? t("admin.users.error_create"), "error");
         return;
       }
 
       reset();
-      addToast("Usuario creado correctamente", "success");
+      addToast(t("admin.users.created"), "success");
       mutate();
     } catch {
-      addToast("Error de conexión", "error");
+      addToast(t("admin.users.error_connection"), "error");
     }
   };
 
@@ -83,14 +86,14 @@ export default function AdminUsersPage() {
 
       if (!res.ok) {
         const body = await res.json();
-        addToast(body.error ?? "Error al eliminar usuario", "error");
+        addToast(body.error ?? t("admin.users.error_delete"), "error");
         return;
       }
 
-      addToast("Usuario eliminado correctamente", "success");
+      addToast(t("admin.users.deleted"), "success");
       mutate();
     } catch {
-      addToast("Error de conexión", "error");
+      addToast(t("admin.users.error_connection"), "error");
     }
   };
 
@@ -98,22 +101,22 @@ export default function AdminUsersPage() {
     <div>
       <div className="mb-10">
         <p className="mb-2 text-xs font-medium text-coral uppercase tracking-[0.2em]">
-          Admin
+          {t("admin.users.badge")}
         </p>
         <h1 className="text-3xl font-light text-navy">
-          Gestión de <span className="font-semibold">usuarios</span>
+          {t("admin.users.title")} <span className="font-semibold">{t("admin.users.title_accent")}</span>
         </h1>
       </div>
 
       <div className="mb-12 rounded-2xl border border-muted/30 bg-white p-6 shadow-xs sm:p-8">
-        <h2 className="mb-6 text-lg font-semibold text-navy">Crear nuevo usuario</h2>
+        <h2 className="mb-6 text-lg font-semibold text-navy">{t("admin.users.create_title")}</h2>
 
         <form onSubmit={handleSubmit(onCreate)} className="space-y-5" noValidate>
 
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor="username" className="mb-1.5 block text-xs font-semibold text-navy uppercase tracking-[0.15em]">
-                Usuario
+                {t("admin.users.username")}
               </label>
               <input
                 id="username"
@@ -121,12 +124,12 @@ export default function AdminUsersPage() {
                 className={inputClass}
               />
               {errors.username && (
-                <p className="mt-1.5 text-xs text-coral/90">{errors.username.message}</p>
+                <p className="mt-1.5 text-xs text-coral/90">{t("admin.users.username_min")}</p>
               )}
             </div>
             <div>
               <label htmlFor="password" className="mb-1.5 block text-xs font-semibold text-navy uppercase tracking-[0.15em]">
-                Contraseña
+                {t("admin.users.password")}
               </label>
               <input
                 id="password"
@@ -135,7 +138,7 @@ export default function AdminUsersPage() {
                 className={inputClass}
               />
               {errors.password && (
-                <p className="mt-1.5 text-xs text-coral/90">{errors.password.message}</p>
+                <p className="mt-1.5 text-xs text-coral/90">{t("admin.users.password_min")}</p>
               )}
             </div>
           </div>
@@ -145,21 +148,33 @@ export default function AdminUsersPage() {
             disabled={isSubmitting}
             className="cursor-pointer rounded-xl bg-coral px-6 py-2.5 text-sm font-medium text-white shadow-xs shadow-coral/20 transition-all duration-200 hover:bg-coral/90 hover:shadow-sm hover:shadow-coral/25 active:shadow-none disabled:pointer-events-none disabled:opacity-50"
           >
-            {isSubmitting ? "Creando..." : "Crear usuario"}
+            {isSubmitting ? t("admin.users.creating") : t("admin.users.create_button")}
           </button>
         </form>
       </div>
 
       <div className="rounded-2xl border border-muted/30 bg-white shadow-xs">
         <div className="border-b border-muted/20 px-6 py-4 sm:px-8">
-          <h2 className="text-lg font-semibold text-navy">
-            Usuarios ({users?.length ?? 0})
-          </h2>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="text-lg font-semibold text-navy">
+              {t("admin.users.table_title")} ({filteredUsers.length})
+            </h2>
+            <div className="relative">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-taupe/50" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t("admin.users.search_placeholder")}
+                className="w-48 rounded-xl border border-muted/40 bg-white py-2 pl-9 pr-4 text-xs text-navy outline-none transition-all duration-200 placeholder:text-taupe/50 focus:border-coral/50 focus:ring-2 focus:ring-coral/15 sm:w-56"
+              />
+            </div>
+          </div>
         </div>
 
         {fetchError && (
           <div className="px-6 py-8 text-center text-sm text-coral">
-            Error al cargar usuarios
+            {t("admin.users.error_load")}
           </div>
         )}
 
@@ -167,25 +182,25 @@ export default function AdminUsersPage() {
           <div className="px-6 py-8 text-center text-sm text-taupe">Cargando...</div>
         )}
 
-        {!isLoading && !fetchError && users?.length === 0 && (
+        {!isLoading && !fetchError && filteredUsers.length === 0 && (
           <div className="px-6 py-8 text-center text-sm text-taupe">
-            No hay usuarios creados aún.
+            {searchQuery ? t("admin.users.no_results_search") : t("admin.users.no_results")}
           </div>
         )}
 
-        {!isLoading && users && users.length > 0 && (
+        {!isLoading && filteredUsers.length > 0 && (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-muted/20 text-xs font-medium text-taupe uppercase tracking-wider">
-                  <th className="px-6 py-4 font-medium sm:px-8">Usuario</th>
-                  <th className="px-6 py-4 font-medium sm:px-8">Rol</th>
-                  <th className="hidden px-6 py-4 font-medium sm:table-cell sm:px-8">Creado</th>
-                  <th className="px-6 py-4 font-medium sm:px-8">Acción</th>
+                  <th className="px-6 py-4 font-medium sm:px-8">{t("admin.users.table_username")}</th>
+                  <th className="px-6 py-4 font-medium sm:px-8">{t("admin.users.table_role")}</th>
+                  <th className="hidden px-6 py-4 font-medium sm:table-cell sm:px-8">{t("admin.users.table_created")}</th>
+                  <th className="px-6 py-4 font-medium sm:px-8">{t("admin.users.table_actions")}</th>
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <tr key={user.id} className="border-b border-muted/10 transition-colors hover:bg-muted/10">
                     <td className="px-6 py-4 font-medium text-navy sm:px-8">{user.username}</td>
                     <td className="px-6 py-4 text-taupe sm:px-8">{user.role}</td>
@@ -193,9 +208,11 @@ export default function AdminUsersPage() {
                     <td className="px-6 py-4 sm:px-8">
                       <button
                         onClick={() => onDelete(user.id)}
-                        className="cursor-pointer rounded-xl border border-coral/30 px-3 py-1.5 text-xs font-medium text-coral transition-all duration-200 hover:bg-coral/5 hover:shadow-xs"
+                        disabled={user.username === currentUsername}
+                        className="cursor-pointer rounded-xl border border-coral/30 px-3 py-1.5 text-xs font-medium text-coral transition-all duration-200 hover:bg-coral/5 hover:shadow-xs disabled:cursor-not-allowed disabled:opacity-30"
+                        title={user.username === currentUsername ? t("admin.users.cannot_delete_self") : undefined}
                       >
-                        Eliminar
+                        {user.username === currentUsername ? t("admin.users.you") : t("admin.users.delete")}
                       </button>
                     </td>
                   </tr>

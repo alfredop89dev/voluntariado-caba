@@ -12,9 +12,7 @@
   "hero": {
     "badge": "Red de voluntarios en CABA por Venezuela",
     "title": "Red de voluntarios en CABA por Venezuela",
-    "description": "Somos una comunidad de venezolanos y argentinos solidarios organizando eventos, recolectando donaciones y brindando apoyo a las víctimas del terremoto en Venezuela.",
-    "cta_calendario": "Ver eventos",
-    "cta_voluntariado": "Sumarme como voluntario"
+    "description": "Somos una comunidad de venezolanos y argentinos solidarios organizando eventos, recolectando donaciones y brindando apoyo a las víctimas del terremoto en Venezuela."
   },
   "about": {
     "badge": "Quiénes somos",
@@ -59,12 +57,12 @@
       "submitting": "Enviando...",
       "success_title": "¡Gracias por registrarte!",
       "success_message": "Nos pondremos en contacto pronto.",
-        "errors": {
-          "name_required": "El nombre es obligatorio",
-          "email_required": "El email es obligatorio",
-          "email_invalid": "Email inválido"
-        },
-        "submit_error": "Ocurrió un error al registrarte. Intenta de nuevo."
+      "errors": {
+        "name_required": "El nombre es obligatorio",
+        "email_required": "El email es obligatorio",
+        "email_invalid": "Email inválido"
+      },
+      "submit_error": "Ocurrió un error al registrarte. Intenta de nuevo."
     }
   },
   "donations": {
@@ -73,7 +71,6 @@
     "cta": "Quiero donar"
   },
   "footer": {
-    "tagline": "Juntos por la reconstrucción de Venezuela",
     "description": "Somos una comunidad de venezolanos y argentinos en CABA organizando eventos, recolectando donaciones y brindando apoyo a las víctimas del terremoto en Venezuela.",
     "links_title": "Enlaces",
     "contact_title": "Contacto",
@@ -82,20 +79,164 @@
     "follow_us": "Seguinos",
     "rights": "Todos los derechos reservados."
   },
-  "event_detail": {
-    "back": "Volver al calendario",
-    "other_events": "Otros",
-    "other_events_accent": "eventos"
-  },
   "admin": {
     "title": "Admin Panel",
-    "logout": "Cerrar sesión",
+    "layout": {
+      "logout": "Cerrar sesión",
+      "mobile_title": "Admin Panel"
+    },
     "nav": {
       "dashboard": "Dashboard",
       "events": "Eventos",
       "volunteers": "Voluntarios",
       "users": "Usuarios",
-      "view_landing": "Ver landing"
+      "landing": "Ver landing"
+    },
+    "login": {
+      "title": "Iniciar sesión",
+      "username": "Usuario",
+      "password": "Contraseña",
+      "login_button": "Ingresar",
+      "logging_in": "Ingresando...",
+      "error_invalid": "Usuario o contraseña incorrectos",
+      "error_connection": "Error de conexión"
+    },
+    "dashboard": {
+      "badge": "Admin",
+      "title": "Panel de",
+      "title_accent": "control",
+      "events_card": "Eventos",
+      "volunteers_card": "Voluntarios",
+      "users_card": "Usuarios",
+      "upcoming": "próximos",
+      "pending": "pendientes",
+      "admins": "administradores",
+      "volunteer_status_title": "Voluntarios por estado",
+      "upcoming_events_title": "Próximos eventos",
+      "status_pending": "Pendientes",
+      "status_contacted": "Contactados",
+      "status_approved": "Aprobados",
+      "status_rejected": "Rechazados",
+      "no_upcoming": "No hay eventos próximos",
+      "error_loading": "Error al cargar algunos datos",
+      "retry": "Reintentar"
+    },
+    "events": {
+      "badge": "Admin",
+      "title": "Gestión de",
+      "title_accent": "eventos",
+      "table_title": "Eventos existentes",
+      "search_placeholder": "Buscar eventos...",
+      "create": "Crear evento",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "no_results_search": "No se encontraron eventos con ese criterio.",
+      "no_results": "No hay eventos creados aún.",
+      "create_modal_title": "Crear nuevo evento",
+      "edit_modal_title": "Editar evento",
+      "create_submit": "Crear evento",
+      "edit_submit": "Guardar cambios",
+      "saving": "Guardando...",
+      "created": "Evento creado correctamente",
+      "updated": "Evento actualizado correctamente",
+      "deleted": "Evento eliminado correctamente",
+      "delete_confirm_title": "Eliminar evento",
+      "delete_confirm_message": "¿Estás seguro? Esta acción no se puede deshacer.",
+      "delete_confirm_label": "Eliminar",
+      "cancel_label": "Cancelar",
+      "export_csv": "Exportar CSV",
+      "page": "Página",
+      "of": "de",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "status_active": "Activo",
+      "table": {
+        "title": "Título",
+        "organizer": "Organizador",
+        "status": "Estado",
+        "date": "Fecha",
+        "time": "Hora",
+        "actions": "Acciones"
+      },
+      "form": {
+        "title": "Título",
+        "organizer": "Organizador",
+        "date": "Fecha",
+        "time": "Hora",
+        "location": "Ubicación",
+        "status": "Estado",
+        "description": "Descripción",
+        "flyer": "Flyer",
+        "image": "Imagen",
+        "logo": "Logo (URL)",
+        "instagram": "Instagram",
+        "phone": "Teléfono",
+        "google_maps": "Google Maps (URL)",
+        "or_url": "O ingresá una URL",
+        "active_default": "Activo (por defecto)"
+      }
+    },
+    "volunteers": {
+      "badge": "Admin",
+      "title": "Solicitudes de",
+      "title_accent": "voluntarios",
+      "total": "Total",
+      "search_placeholder": "Buscar por nombre, email o ubicación...",
+      "filter_all": "Todos",
+      "status_pending": "Pendiente",
+      "status_contacted": "Contactado",
+      "status_approved": "Aprobado",
+      "status_rejected": "Rechazado",
+      "export_csv": "Exportar CSV",
+      "delete": "Eliminar",
+      "delete_confirm_title": "Eliminar solicitud",
+      "delete_confirm_message": "¿Estás seguro? Esta acción no se puede deshacer.",
+      "delete_confirm_label": "Eliminar",
+      "cancel_label": "Cancelar",
+      "no_results_filter": "No hay solicitudes con ese filtro.",
+      "no_results": "No hay solicitudes de voluntarios todavía.",
+      "error": "Error al cargar las solicitudes",
+      "status_updated": "Estado actualizado a",
+      "error_update": "Error al actualizar estado",
+      "deleted": "Solicitud eliminada correctamente",
+      "error_delete": "Error al eliminar solicitud",
+      "error_connection": "Error de conexión",
+      "event_field": "Evento de interés",
+      "phone_field": "Teléfono",
+      "organizer_field": "Organización",
+      "instagram_field": "Instagram",
+      "location_field": "Ubicación",
+      "skills_field": "Habilidades",
+      "availability_field": "Disponibilidad"
+    },
+    "users": {
+      "badge": "Admin",
+      "title": "Gestión de",
+      "title_accent": "usuarios",
+      "create_title": "Crear nuevo usuario",
+      "username": "Usuario",
+      "password": "Contraseña",
+      "create_button": "Crear usuario",
+      "creating": "Creando...",
+      "created": "Usuario creado correctamente",
+      "error_create": "Error al crear usuario",
+      "search_placeholder": "Buscar usuario...",
+      "table_title": "Usuarios",
+      "table_username": "Usuario",
+      "table_role": "Rol",
+      "table_created": "Creado",
+      "table_actions": "Acción",
+      "delete": "Eliminar",
+      "you": "Tú",
+      "deleted": "Usuario eliminado correctamente",
+      "error_delete": "Error al eliminar usuario",
+      "error_connection": "Error de conexión",
+      "no_results_search": "No se encontraron usuarios con ese criterio.",
+      "no_results": "No hay usuarios creados aún.",
+      "error_load": "Error al cargar usuarios",
+      "cannot_delete_self": "No puedes eliminar tu propio usuario",
+      "username_min": "Mínimo 3 caracteres",
+      "password_min": "Mínimo 6 caracteres"
     }
   }
 }

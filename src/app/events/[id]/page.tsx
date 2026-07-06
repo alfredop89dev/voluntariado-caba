@@ -7,7 +7,7 @@ import { CardImage } from "@/components/card-image";
 import { EventCountdown } from "@/components/event-countdown";
 import { EventAddToCalendar } from "@/components/event-add-to-calendar";
 import { EventShare } from "@/components/event-share";
-import { ArrowLeft, MapPin } from "lucide-react";
+import { ArrowLeft, MapPin, Camera } from "lucide-react";
 import { SECTION_IDS, INSTAGRAM_BASE_URL } from "@/lib/config";
 import { Footer } from "@/components/layout/footer";
 import type { Metadata } from "next";
@@ -50,6 +50,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+const STATUS_STYLES: Record<string, string> = {
+  activo: "bg-green-50 text-green-700 border-green-200",
+  cerrado: "bg-red-50 text-red-700 border-red-200",
+  pendiente: "bg-amber-50 text-amber-700 border-amber-200",
+  pospuesto: "bg-blue-50 text-blue-700 border-blue-200",
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  activo: "Activo",
+  cerrado: "Cerrado",
+  pendiente: "Pendiente",
+  pospuesto: "Pospuesto",
+};
+
 function getDayNum(date: Date): number {
   return new Date(date).getDate();
 }
@@ -84,6 +98,11 @@ function RelatedEventCard({ event }: { event: IEventData }) {
         <h3 className="text-sm font-semibold leading-snug text-navy transition-colors group-hover:text-coral">
           {event.title}
         </h3>
+        {event.status && event.status !== "activo" && (
+          <span className={`mt-1.5 inline-flex rounded-full border px-2 py-0.5 text-[10px] font-medium ${STATUS_STYLES[event.status] ?? ""}`}>
+            {STATUS_LABELS[event.status]}
+          </span>
+        )}
       </div>
     </Link>
   );
@@ -125,7 +144,7 @@ export default async function EventPage({ params }: Props) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-warm">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
@@ -151,13 +170,14 @@ export default async function EventPage({ params }: Props) {
           <h1 className="text-3xl font-light leading-tight text-white sm:text-4xl lg:text-5xl">
             {event.title}
           </h1>
+          <div className="mt-8">
+            <EventCountdown date={event.date} time={event.time} variant="hero" />
+          </div>
         </div>
       </section>
 
       <main className="flex-1 px-6 py-16 sm:py-20">
         <article className="mx-auto max-w-2xl">
-          <EventCountdown date={event.date} time={event.time} />
-
           <div className="mb-6 flex flex-wrap gap-3">
             {event.organizer && (
               <span className="inline-flex items-center rounded-full bg-navy/5 px-3 py-1 text-xs font-medium text-navy/70">
@@ -166,8 +186,13 @@ export default async function EventPage({ params }: Props) {
             )}
             {event.location && (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-muted/20 px-3 py-1 text-xs text-taupe">
-                <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <MapPin size={14} />
                 {event.location}
+              </span>
+            )}
+            {event.status && event.status !== "activo" && (
+              <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${STATUS_STYLES[event.status] ?? ""}`}>
+                {STATUS_LABELS[event.status]}
               </span>
             )}
           </div>
@@ -195,11 +220,7 @@ export default async function EventPage({ params }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                  </svg>
+                  <Camera size={16} />
                 </Button>
               )}
               {event.googleMaps && (

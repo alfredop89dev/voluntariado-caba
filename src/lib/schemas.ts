@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const eventStatusSchema = z.enum(["activo", "cerrado", "pendiente", "pospuesto"]);
+
 export const eventSchema = z.object({
   title: z.string().min(1, "El título es obligatorio").max(200),
   organizer: z.string().max(100).optional().or(z.literal("")),
@@ -13,6 +15,7 @@ export const eventSchema = z.object({
   instagram: z.string().max(200).optional().or(z.literal("")),
   googleMaps: z.string().url("URL inválida").optional().or(z.literal("")),
   phone: z.string().max(20).optional().or(z.literal("")),
+  status: eventStatusSchema.optional().or(z.literal("")),
 });
 
 export const volunteerSchema = z.object({

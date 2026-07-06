@@ -1,6 +1,9 @@
 "use client";
 
 import useSWR from "swr";
+import { Calendar, Users, Shield, Clock, CheckCircle, XCircle, UserPlus } from "lucide-react";
+import { fetchJson, formatDate } from "@/lib/api-utils";
+import { useI18n } from "@/lib/i18n/translations-context";
 import type { IEventData } from "@/lib/models/event";
 
 interface VolunteerEntry {
@@ -12,79 +15,183 @@ interface UserEntry {
   id: string;
 }
 
-const fetcher = async (url: string) => {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Error al cargar datos");
-  return res.json();
-};
+function SkeletonCard() {
+  return (
+    <div className="rounded-2xl border border-muted/30 bg-white p-6 shadow-xs sm:p-8">
+      <div className="mb-3 size-10 rounded-xl bg-muted/30 animate-pulse" />
+      <div className="mb-2 h-3 w-20 rounded bg-muted/30 animate-pulse" />
+      <div className="h-8 w-16 rounded bg-muted/30 animate-pulse" />
+      <div className="mt-2 h-3 w-24 rounded bg-muted/30 animate-pulse" />
+    </div>
+  );
+}
+
+function SkeletonRow() {
+  return (
+    <div className="flex items-center gap-3 border-b border-muted/10 px-6 py-3 sm:px-8">
+      <div className="size-2 shrink-0 rounded-full bg-muted/30 animate-pulse" />
+      <div className="flex-1 space-y-1.5">
+        <div className="h-4 w-3/5 rounded bg-muted/30 animate-pulse" />
+        <div className="h-3 w-2/5 rounded bg-muted/30 animate-pulse" />
+      </div>
+      <div className="h-3 w-20 rounded bg-muted/30 animate-pulse" />
+    </div>
+  );
+}
 
 export default function AdminDashboardPage() {
-  const { data: events } = useSWR<IEventData[]>("/api/admin/events", fetcher);
-  const { data: volunteers } = useSWR<VolunteerEntry[]>("/api/admin/volunteers", fetcher);
-  const { data: users } = useSWR<UserEntry[]>("/api/admin/users", fetcher);
+  const { t } = useI18n();
+  const { data: events, isLoading: eventsLoading, error: eventsError, mutate: retryEvents } = useSWR<IEventData[]>("/api/admin/events", fetchJson);
+  const { data: volunteers, isLoading: volsLoading, error: volsError, mutate: retryVols } = useSWR<VolunteerEntry[]>("/api/admin/volunteers", fetchJson);
+  const { data: users, isLoading: usersLoading, error: usersError, mutate: retryUsers } = useSWR<UserEntry[]>("/api/admin/users", fetchJson);
+
+  const isLoading = eventsLoading || volsLoading || usersLoading;
+  const hasError = eventsError || volsError || usersError;
 
   const pendingVolunteers = volunteers?.filter((v) => v.status === "pending").length ?? 0;
-  const upcomingEvents = events?.filter((e) => new Date(e.date) >= new Date()).length ?? 0;
+  const contactedVolunteers = volunteers?.filter((v) => v.status === "contacted").length ?? 0;
+  const approvedVolunteers = volunteers?.filter((v) => v.status === "approved").length ?? 0;
+  const rejectedVolunteers = volunteers?.filter((v) => v.status === "rejected").length ?? 0;
 
-  const cards = [
-    {
-      label: "Eventos",
-      value: events?.length ?? 0,
-      sub: `${upcomingEvents} próximos`,
-      icon: "calendar",
-    },
-    {
-      label: "Voluntarios",
-      value: volunteers?.length ?? 0,
-      sub: `${pendingVolunteers} pendientes`,
-      icon: "users",
-    },
-    {
-      label: "Usuarios",
-      value: users?.length ?? 0,
-      icon: "admin",
-    },
+  const now = new Date();
+  const upcomingEvents = events
+    ?.filter((e) => new Date(e.date) >= now)
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(0, 5) ?? [];
+
+  const volunteerStatusCards = [
+    { label: t("admin.dashboard.status_pending"), value: pendingVolunteers, color: "bg-amber-100 text-amber-700", icon: Clock },
+    { label: t("admin.dashboard.status_contacted"), value: contactedVolunteers, color: "bg-blue-100 text-blue-700", icon: UserPlus },
+    { label: t("admin.dashboard.status_approved"), value: approvedVolunteers, color: "bg-green-100 text-green-700", icon: CheckCircle },
+    { label: t("admin.dashboard.status_rejected"), value: rejectedVolunteers, color: "bg-red-100 text-red-700", icon: XCircle },
   ];
 
   return (
     <div>
       <div className="mb-10">
         <p className="mb-2 text-xs font-medium text-coral uppercase tracking-[0.2em]">
-          Admin
+          {t("admin.dashboard.badge")}
         </p>
         <h1 className="text-3xl font-light text-navy">
-          Panel de <span className="font-semibold">control</span>
+          {t("admin.dashboard.title")} <span className="font-semibold">{t("admin.dashboard.title_accent")}</span>
         </h1>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-3">
-        {cards.map((card) => (
-          <div
-            key={card.label}
-            className="rounded-2xl border border-muted/30 bg-white p-6 shadow-xs sm:p-8"
+      {hasError && (
+        <div className="mb-8 rounded-2xl border border-red-200 bg-red-50 p-6 text-center">
+          <p className="mb-3 text-sm text-red-700">{t("admin.dashboard.error_loading")}</p>
+          <button
+            onClick={() => { retryEvents(); retryVols(); retryUsers(); }}
+            className="cursor-pointer rounded-xl bg-red-600 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-red-700"
           >
-            <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-coral/10 text-coral">
-              {card.icon === "calendar" && (
-                <svg className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                </svg>
-              )}
-              {card.icon === "users" && (
-                <svg className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-                </svg>
-              )}
-              {card.icon === "admin" && (
-                <svg className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                </svg>
-              )}
+            {t("admin.dashboard.retry")}
+          </button>
+        </div>
+      )}
+
+      <div className="grid gap-6 sm:grid-cols-3">
+        {isLoading ? (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        ) : (
+          <>
+            <div className="rounded-2xl border border-muted/30 bg-white p-6 shadow-xs sm:p-8">
+              <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-coral/10 text-coral">
+                <Calendar size={20} />
+              </div>
+              <p className="text-xs font-semibold text-taupe uppercase tracking-[0.15em]">{t("admin.dashboard.events_card")}</p>
+              <p className="mt-1 text-3xl font-light text-navy">{events?.length ?? 0}</p>
+              <p className="mt-1 text-xs text-taupe">{upcomingEvents.length} {t("admin.dashboard.upcoming")}</p>
             </div>
-            <p className="text-xs font-semibold text-taupe uppercase tracking-[0.15em]">{card.label}</p>
-            <p className="mt-1 text-3xl font-light text-navy">{card.value}</p>
-            {card.sub && <p className="mt-1 text-xs text-taupe">{card.sub}</p>}
+
+            <div className="rounded-2xl border border-muted/30 bg-white p-6 shadow-xs sm:p-8">
+              <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-coral/10 text-coral">
+                <Users size={20} />
+              </div>
+              <p className="text-xs font-semibold text-taupe uppercase tracking-[0.15em]">{t("admin.dashboard.volunteers_card")}</p>
+              <p className="mt-1 text-3xl font-light text-navy">{volunteers?.length ?? 0}</p>
+              <p className="mt-1 text-xs text-taupe">{pendingVolunteers} {t("admin.dashboard.pending")}</p>
+            </div>
+
+            <div className="rounded-2xl border border-muted/30 bg-white p-6 shadow-xs sm:p-8">
+              <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-coral/10 text-coral">
+                <Shield size={20} />
+              </div>
+              <p className="text-xs font-semibold text-taupe uppercase tracking-[0.15em]">{t("admin.dashboard.users_card")}</p>
+              <p className="mt-1 text-3xl font-light text-navy">{users?.length ?? 0}</p>
+              <p className="mt-1 text-xs text-taupe">{t("admin.dashboard.admins")}</p>
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <div className="rounded-2xl border border-muted/30 bg-white shadow-xs">
+          <div className="border-b border-muted/20 px-6 py-4 sm:px-8">
+            <h2 className="text-sm font-semibold text-navy">{t("admin.dashboard.volunteer_status_title")}</h2>
           </div>
-        ))}
+          {isLoading ? (
+            <div className="space-y-0">
+              <SkeletonRow />
+              <SkeletonRow />
+              <SkeletonRow />
+              <SkeletonRow />
+            </div>
+          ) : (
+            <div className="divide-y divide-muted/10 px-6 py-4 sm:px-8">
+              {volunteerStatusCards.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <div key={s.label} className="flex items-center justify-between py-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`flex size-8 items-center justify-center rounded-lg ${s.color}`}>
+                        <Icon size={14} />
+                      </div>
+                      <span className="text-sm text-navy">{s.label}</span>
+                    </div>
+                    <span className="text-sm font-semibold text-navy">{s.value}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="rounded-2xl border border-muted/30 bg-white shadow-xs">
+          <div className="border-b border-muted/20 px-6 py-4 sm:px-8">
+            <h2 className="text-sm font-semibold text-navy">{t("admin.dashboard.upcoming_events_title")}</h2>
+          </div>
+          {isLoading ? (
+            <div className="space-y-0">
+              <SkeletonRow />
+              <SkeletonRow />
+              <SkeletonRow />
+            </div>
+          ) : upcomingEvents.length === 0 ? (
+            <div className="px-6 py-8 text-center text-sm text-taupe sm:px-8">
+              {t("admin.dashboard.no_upcoming")}
+            </div>
+          ) : (
+            <div className="divide-y divide-muted/10">
+              {upcomingEvents.map((event) => (
+                <div key={event.id} className="flex items-center justify-between px-6 py-3 sm:px-8">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-navy">{event.title}</p>
+                    <p className="text-xs text-taupe">{formatDate(event.date)}</p>
+                  </div>
+                  {event.status && event.status !== "activo" && (
+                    <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-0.5 text-[11px] font-medium text-amber-700 capitalize">
+                      {event.status}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

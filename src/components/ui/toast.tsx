@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "motion/react";
+import { X } from "lucide-react";
 import { useToastStore, type ToastType } from "@/stores/toast-store";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +42,7 @@ export function ToastContainer() {
               className="ml-auto cursor-pointer text-current/50 transition-colors hover:text-current"
               aria-label="Cerrar"
             >
-              ✕
+              <X size={14} />
             </button>
           </motion.div>
         ))}
