@@ -24,7 +24,7 @@ export function VolunteerSection() {
                 {t("volunteer.title")}{" "}
                 <span className="font-semibold">{t("volunteer.title_accent")}</span>
               </h2>
-              <p className="mt-4 text-base leading-relaxed text-taupe/80">
+              <p className="mt-4 text-base leading-relaxed">
                 {t("volunteer.description")}
               </p>
 

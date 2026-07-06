@@ -36,7 +36,7 @@ export function AboutSection() {
             <h2 className="text-3xl font-light leading-tight text-navy sm:text-4xl">
               {t("about.title")}
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-taupe/80">
+            <p className="mt-4 text-base leading-relaxed">
               {t("about.description")}
             </p>
           </div>
@@ -56,7 +56,7 @@ export function AboutSection() {
                   <h3 className="mb-2 text-base font-semibold text-navy">
                     {t(`about.${card.key}_title`)}
                   </h3>
-                  <p className="text-sm leading-relaxed text-taupe/80">
+                  <p className="text-sm leading-relaxed">
                     {t(`about.${card.key}_description`)}
                   </p>
                 </div>

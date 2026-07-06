@@ -75,7 +75,7 @@ function EventCard({ event, index }: { event: IEventData; index: number }) {
             </h3>
 
             {event.description && (
-              <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-taupe/80">
+              <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed">
                 {event.description}
               </p>
             )}
@@ -167,7 +167,7 @@ export function CalendarSection() {
     <section
       ref={sectionRef}
       id={SECTION_IDS.calendario}
-      className="bg-warm px-6 py-24 sm:py-32"
+      className="bg-[#FDFFFC] px-6 py-24 sm:py-32"
     >
       <div className="mx-auto max-w-6xl">
         <FadeIn>
@@ -183,7 +183,7 @@ export function CalendarSection() {
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <div className="relative mx-auto mb-12 max-w-md">
+          <div className="relative mx-auto mb-12 w-full">
             <Search
               size={16}
               className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-taupe/50"
@@ -193,7 +193,7 @@ export function CalendarSection() {
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               placeholder={t("calendar.search_placeholder")}
-              className="w-full rounded-xl border border-muted/50 bg-white py-3 pr-4 pl-11 text-sm text-navy outline-none transition-all duration-200 placeholder:text-taupe/40 focus:border-coral/40 focus:ring-2 focus:ring-coral/10"
+              className="w-full border-b bg-white py-3 pr-4 pl-11 text-sm text-navy outline-none transition-all duration-200 placeholder:text-taupe/40 focus:border-coral/40 focus:ring-2 focus:ring-coral/10"
             />
             {searchQuery && (
               <button

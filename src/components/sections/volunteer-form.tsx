@@ -23,7 +23,7 @@ const volunteerSchema = z.object({
 type VolunteerFormData = z.infer<typeof volunteerSchema>;
 
 const inputClass =
-  "w-full border-b border-muted/40 bg-transparent px-0 py-3 text-sm text-navy outline-none transition-all duration-200 placeholder:text-taupe/40 focus:border-coral";
+  "w-full border-b border-muted/40 bg-transparent px-0 py-3 text-sm outline-none transition-all duration-200 focus:border-coral";
 
 export function VolunteerForm() {
   const { t } = useI18n();
@@ -81,7 +81,7 @@ export function VolunteerForm() {
         >
           <CheckCircle2 size={28} className="text-coral" />
         </motion.div>
-        <h3 className="mb-1.5 text-lg font-semibold text-navy">
+        <h3 className="mb-1.5 text-lg font-semibold">
           {t("volunteer.form.success_title")}
         </h3>
         <p className="text-sm text-taupe/70">

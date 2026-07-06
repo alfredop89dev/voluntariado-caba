@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Globe } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useUiStore } from "@/stores/ui-store";
-import { SECTION_IDS, ADMIN } from "@/lib/config";
+import { SECTION_IDS } from "@/lib/config";
 import { useI18n } from "@/lib/i18n/translations-context";
 import { useEffect } from "react";
 
@@ -54,13 +54,6 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
-            <div className="mx-3 h-5 w-px bg-white/10" />
-            <Link
-              href={ADMIN.LOGIN_PATH}
-              className="rounded-lg px-4 py-2 text-[13px] font-medium tracking-wide text-coral/80 transition-all duration-200 hover:bg-coral/10 hover:text-coral"
-            >
-              Admin
-            </Link>
           </nav>
 
           <button
@@ -97,14 +90,6 @@ export function Header() {
                   {item.label}
                 </Link>
               ))}
-              <div className="my-2 h-px bg-white/10" />
-              <Link
-                href={ADMIN.LOGIN_PATH}
-                onClick={closeMobileMenu}
-                className="block rounded-lg px-4 py-3 text-sm font-medium text-coral/80 transition-all duration-200 hover:bg-coral/10 hover:text-coral"
-              >
-                Admin
-              </Link>
             </nav>
           </motion.div>
         )}

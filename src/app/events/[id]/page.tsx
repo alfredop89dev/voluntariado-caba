@@ -9,7 +9,7 @@ import { EventAddToCalendar } from "@/components/event-add-to-calendar";
 import { EventShare } from "@/components/event-share";
 import { ArrowLeft, MapPin, Camera } from "lucide-react";
 import { SECTION_IDS, INSTAGRAM_BASE_URL } from "@/lib/config";
-import { Footer } from "@/components/layout/footer";
+
 import type { Metadata } from "next";
 import type { IEventData } from "@/lib/models/event";
 
@@ -84,18 +84,18 @@ function RelatedEventCard({ event }: { event: IEventData }) {
           <span className="text-sm font-bold leading-none text-navy">
             {getDayNum(event.date)}
           </span>
-          <span className="text-[9px] font-semibold uppercase tracking-wider text-coral">
+          <span className="text-[9px] font-semibold uppercase tracking-wider">
             {getMonthAbbr(event.date)}
           </span>
         </div>
       </div>
       <div className="p-4">
         {event.organizer && (
-          <span className="mb-1.5 inline-flex items-center rounded-full bg-navy/5 px-2 py-0.5 text-[10px] font-medium text-navy/70">
+          <span className="mb-1.5 inline-flex items-center rounded-full bg-navy/5 px-2 py-0.5 text-[10px] font-medium">
             {event.organizer}
           </span>
         )}
-        <h3 className="text-sm font-semibold leading-snug text-navy transition-colors group-hover:text-coral">
+        <h3 className="text-sm font-semibold leading-snug text-navy transition-colors">
           {event.title}
         </h3>
         {event.status && event.status !== "activo" && (
@@ -144,7 +144,7 @@ export default async function EventPage({ params }: Props) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-warm">
+    <div className="flex min-h-screen flex-col bg-[#FDFFFC]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
@@ -164,7 +164,7 @@ export default async function EventPage({ params }: Props) {
         <EventHeroImage src={event.flyer || event.image} title={event.title} />
 
         <div className="relative z-1 mx-auto max-w-2xl px-6 text-center">
-          <p className="mb-4 text-xs font-medium text-coral uppercase tracking-[0.25em]">
+          <p className="mb-4 text-xs font-medium uppercase tracking-[0.25em]">
             {formattedDate} {event.time && `— ${event.time} hs`}
           </p>
           <h1 className="text-3xl font-light leading-tight text-white sm:text-4xl lg:text-5xl">
@@ -180,7 +180,7 @@ export default async function EventPage({ params }: Props) {
         <article className="mx-auto max-w-2xl">
           <div className="mb-6 flex flex-wrap gap-3">
             {event.organizer && (
-              <span className="inline-flex items-center rounded-full bg-navy/5 px-3 py-1 text-xs font-medium text-navy/70">
+              <span className="inline-flex items-center rounded-full bg-navy/5 px-3 py-1 text-xs font-medium">
                 {event.organizer}
               </span>
             )}
@@ -198,7 +198,7 @@ export default async function EventPage({ params }: Props) {
           </div>
 
           {event.description && (
-            <div className="prose prose-sm max-w-none text-taupe">
+            <div className="prose prose-sm max-w-none">
               <p className="leading-relaxed">{event.description}</p>
             </div>
           )}
@@ -270,7 +270,6 @@ export default async function EventPage({ params }: Props) {
         )}
       </main>
 
-      <Footer />
     </div>
   );
 }
